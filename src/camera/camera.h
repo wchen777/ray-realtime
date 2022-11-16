@@ -13,12 +13,14 @@
 class Camera {
 public:
 
-    Camera(SceneCameraData camData, int height, int width) :
+    Camera(SceneCameraData camData, int height, int width, float farPlane, float nearPlane) :
        look{glm::vec3(camData.look)},
        pos{glm::vec3(camData.pos)},
        up{glm::vec3(camData.up)},
        camData{camData},
-       aspectRatio{float(width) / float(height)}
+       aspectRatio{float(width) / float(height)},
+       farPlane(farPlane),
+       nearPlane(nearPlane)
     {
         setViewMatrices();
     }
@@ -28,11 +30,14 @@ public:
     glm::vec3 pos;
 
     float aspectRatio;
+    float farPlane;
+    float nearPlane;
 
     SceneCameraData camData;
 
     glm::mat4 invViewMatrix;
     glm::mat4 viewMatrix;
+    glm::mat4 projMatrix;
 
 
     void setViewMatrices(); // set the view matrix fields

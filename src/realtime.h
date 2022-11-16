@@ -1,6 +1,7 @@
 #pragma once
 
 // Defined before including GLEW to suppress deprecation messages on macOS
+#include "camera/camera.h"
 #ifdef __APPLE__
 #define GL_SILENCE_DEPRECATION
 #endif
@@ -13,6 +14,9 @@
 #include <QTime>
 #include <QTimer>
 
+#include "utils/sceneparser.h"
+
+
 class Realtime : public QOpenGLWidget
 {
 public:
@@ -20,6 +24,10 @@ public:
     void finish();                                      // Called on program exit
     void sceneChanged();
     void settingsChanged();
+
+    SceneParser sceneParser = SceneParser{};                          // initialize the scene parser
+    RenderData sceneRenderData;
+    Camera sceneCamera;
 
 public slots:
     void tick(QTimerEvent* event);                      // Called once per tick of m_timer

@@ -57,10 +57,13 @@ void Realtime::initializeGL() {
     glViewport(0, 0, size().width() * m_devicePixelRatio, size().height() * m_devicePixelRatio);
 
     // Students: anything requiring OpenGL calls when the program starts should be done here
+
+
 }
 
 void Realtime::paintGL() {
     // Students: anything requiring OpenGL calls every frame should be done here
+
 }
 
 void Realtime::resizeGL(int w, int h) {
@@ -71,6 +74,13 @@ void Realtime::resizeGL(int w, int h) {
 }
 
 void Realtime::sceneChanged() {
+
+    // TODOs:
+
+    // parse the scene that was stored in settings from the call to upload scenefile
+    Realtime::sceneParser.parse(settings.sceneFilePath, Realtime::sceneRenderData);
+    Camera cam(Realtime::sceneRenderData.cameraData, size().height(), size().width(), settings.farPlane, settings.nearPlane);
+    Realtime::sceneCamera = cam;
 
     update(); // asks for a PaintGL() call to occur
 }

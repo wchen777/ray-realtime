@@ -32,6 +32,8 @@ add_executable(${PROJECT_NAME}
     src/settings.cpp
     src/utils/scenefilereader.cpp
     src/utils/sceneparser.cpp
+    src/camera/camera.cpp
+    src/camera/transforms.cpp
 
     src/mainwindow.h
     src/realtime.h
@@ -40,6 +42,8 @@ add_executable(${PROJECT_NAME}
     src/utils/scenefilereader.h
     src/utils/sceneparser.h
     src/utils/shaderloader.h
+    src/camera/camera.h
+    src/camera/transforms.h
 )
 
 # GLM: this creates its library and allows you to `#include "glm/..."`

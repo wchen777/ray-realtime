@@ -23,6 +23,19 @@ void Camera::setViewMatrices() {
 
     Camera::viewMatrix = viewM;
     Camera::invViewMatrix = glm::inverse(viewM);
+
+    auto c = -Camera::nearPlane / Camera::farPlane;
+    auto perspectiveMatrix = glm::mat4(
+                    1.f, 0.f, 0.f, 0.f,
+                    0.f, 1.f, 0.f, 0.f,
+                    0.f, 0.f, 1/(1+c), -1.f,
+                    0.f, 0.f, -c/(1+c), 0.f
+                 );
+
+    Camera::projMatrix = glm::mat4(
+
+
+                );
 }
 
 glm::mat4 Camera::getViewMatrix() const {
