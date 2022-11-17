@@ -22,7 +22,9 @@ public:
        camData{camData},
        aspectRatio{static_cast<float>(width) / static_cast<float>(height)},
        farPlane(farPlane),
-       nearPlane(nearPlane)
+       nearPlane(nearPlane),
+       width(width),
+       height(height)
     {
         setViewMatrices();
     }
@@ -34,6 +36,9 @@ public:
     float aspectRatio; // this is width / height!!
     float farPlane;
     float nearPlane;
+
+    int height;
+    int width;
 
     SceneCameraData camData;
 
