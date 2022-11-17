@@ -1,5 +1,6 @@
 #include "trimesh.h"
 #include <string>
+#include <array>
 #include <iostream>
 #include <ostream>
 
