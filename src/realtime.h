@@ -2,6 +2,7 @@
 
 // Defined before including GLEW to suppress deprecation messages on macOS
 #include "camera/camera.h"
+#include "renderer/primitive.h"
 #ifdef __APPLE__
 #define GL_SILENCE_DEPRECATION
 #endif
@@ -28,6 +29,16 @@ public:
     SceneParser sceneParser = SceneParser{};                          // initialize the scene parser
     RenderData sceneRenderData;
     Camera sceneCamera;
+    GLuint shader;
+
+    void CompilePrimitiveMeshes();
+    void UpdateTesselations();
+    void DestroyMeshes();
+    std::vector<MeshPrimitive> objectMeshes;
+
+    int currentParam1;
+    int currentParam2;
+
 
 public slots:
     void tick(QTimerEvent* event);                      // Called once per tick of m_timer

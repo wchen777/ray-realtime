@@ -38,12 +38,23 @@ void Camera::setViewMatrices() {
     Camera::projMatrix = unhingingMatrix * scaleMatrix;
 }
 
-glm::mat4 Camera::getViewMatrix() const {
+void Camera::updateViewPlanes(float farPlaneNew, float nearPlaneNew) {
+    Camera::farPlane = farPlaneNew;
+    Camera::nearPlane = nearPlaneNew;
+
+    Camera::setViewMatrices();
+}
+
+inline glm::mat4 Camera::getViewMatrix() const {
     return Camera::viewMatrix;
 }
 
-glm::mat4 Camera::getInvViewMatrix() const {
+inline glm::mat4 Camera::getInvViewMatrix() const {
     return Camera::invViewMatrix;
+}
+
+inline glm::mat4 Camera::getProjMatrix() const {
+    return Camera::projMatrix;
 }
 
 float Camera::getAspectRatio() const {

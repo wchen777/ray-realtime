@@ -13,6 +13,8 @@
 class Camera {
 public:
 
+    Camera(); // default constructor
+
     Camera(SceneCameraData camData, int height, int width, float farPlane, float nearPlane) :
        look{glm::vec3(camData.look)},
        pos{glm::vec3(camData.pos)},
@@ -42,10 +44,13 @@ public:
 
     void setViewMatrices(); // set the view matrix fields
 
+    void updateViewPlanes(float farPlaneNew, float nearPlaneNew); // when the far and new planes are updated
+
     // Returns the view matrix for the current camera settings.
     // You might also want to define another function that return the inverse of the view matrix.
-    glm::mat4 getViewMatrix() const;
-    glm::mat4 getInvViewMatrix() const;
+    inline glm::mat4 getViewMatrix() const;
+    inline glm::mat4 getInvViewMatrix() const;
+    inline glm::mat4 getProjMatrix() const;
 
     // Returns the aspect ratio of the camera.
     float getAspectRatio() const;

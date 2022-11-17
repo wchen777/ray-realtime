@@ -5,6 +5,7 @@
 #include <QKeyEvent>
 #include <iostream>
 #include "settings.h"
+#include "utils/shaderloader.h"
 
 // ================== Project 5: Lights, Camera
 
@@ -30,6 +31,9 @@ void Realtime::finish() {
     this->makeCurrent();
 
     // Students: anything requiring OpenGL calls when the program exits should be done here
+
+    glDeleteProgram(Realtime::shader);
+    Realtime::DestroyMeshes();
 
     this->doneCurrent();
 }
@@ -58,7 +62,15 @@ void Realtime::initializeGL() {
 
     // Students: anything requiring OpenGL calls when the program starts should be done here
 
+    // initialize the shader
+    Realtime::shader = ShaderLoader::createShaderProgram("resources/shaders/default.vert", "resources/shaders/default.frag");
 
+    // bind object vbo's
+    // create vao's
+
+    // etc. etc.
+
+    // unbind
 }
 
 void Realtime::paintGL() {
@@ -71,21 +83,54 @@ void Realtime::resizeGL(int w, int h) {
     glViewport(0, 0, size().width() * m_devicePixelRatio, size().height() * m_devicePixelRatio);
 
     // Students: anything requiring OpenGL calls when the program starts should be done here
+
+    // TODO: not sure what exactly to do here
+    // include the rebuild scene stuff here.
+    // modify the camera's fields?
+
 }
 
 void Realtime::sceneChanged() {
 
     // TODOs:
 
+    // destroy old meshes
+    Realtime::DestroyMeshes();
+
+    // set current params (for on startup)
+    Realtime::currentParam1 = settings.shapeParameter1;
+    Realtime::currentParam2 = settings.shapeParameter2;
+
     // parse the scene that was stored in settings from the call to upload scenefile
     Realtime::sceneParser.parse(settings.sceneFilePath, Realtime::sceneRenderData);
     Camera cam(Realtime::sceneRenderData.cameraData, size().height(), size().width(), settings.farPlane, settings.nearPlane);
     Realtime::sceneCamera = cam;
 
+    // build each primitive into a composite struct that contains the class for the trimesh, etc.
+    // apply it to the realtime class
+    Realtime::CompilePrimitiveMeshes();
+
     update(); // asks for a PaintGL() call to occur
 }
 
 void Realtime::settingsChanged() {
+
+    // near plane and far plane updates
+    if (Realtime::sceneCamera.nearPlane != settings.nearPlane || Realtime::sceneCamera.farPlane != settings.farPlane) {
+        Realtime::sceneCamera.updateViewPlanes(settings.farPlane, settings.nearPlane);
+    }
+
+    // updates for tesselation params
+    if (settings.shapeParameter1 != Realtime::currentParam1 || settings.shapeParameter2 != Realtime::currentParam2) {
+        // set current params (for on startup)
+        Realtime::currentParam1 = settings.shapeParameter1;
+        Realtime::currentParam2 = settings.shapeParameter2;
+
+        Realtime::UpdateTesselations();
+    }
+
+    // TODO: updates for extra credit features
+
 
     update(); // asks for a PaintGL() call to occur
 }

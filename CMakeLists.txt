@@ -38,6 +38,7 @@ add_executable(${PROJECT_NAME}
     src/trimeshes/cone.cpp
     src/trimeshes/sphere.cpp
     src/trimeshes/cylinder.cpp
+    src/renderer/primitive.cpp
 
     src/mainwindow.h
     src/realtime.h
@@ -53,6 +54,8 @@ add_executable(${PROJECT_NAME}
     src/trimeshes/cone.h
     src/trimeshes/sphere.h
     src/trimeshes/cylinder.h
+    src/renderer/debug.h
+    src/renderer/primitive.h
 )
 
 # GLM: this creates its library and allows you to `#include "glm/..."`
