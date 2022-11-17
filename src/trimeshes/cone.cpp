@@ -1,5 +1,11 @@
 #include "cone.h"
 
+/*
+ *  get type
+*/
+PrimitiveType Cone::GetType() {
+    return PrimitiveType::PRIMITIVE_CONE;
+}
 
 /*
  *  cone's normal formula

@@ -84,8 +84,6 @@ void Realtime::InitializeLightUniforms() {
     }
 
 
-
-
     this->doneCurrent();
 }
 

@@ -2,6 +2,14 @@
 
 
 /*
+ *  get type
+*/
+PrimitiveType Cylinder::GetType() {
+    return PrimitiveType::PRIMITIVE_CYLINDER;
+}
+
+
+/*
  *  set vertex data override for derived class
 */
 void Cylinder::SetVertexData() {

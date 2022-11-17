@@ -1,6 +1,14 @@
 #include "sphere.h"
 
 /*
+ *  get type
+*/
+PrimitiveType Sphere::GetType() {
+    return PrimitiveType::PRIMITIVE_SPHERE;
+}
+
+
+/*
  * shape specific normal
 */
 inline glm::vec3 Sphere::ShapeNormal(glm::vec3& xyz) {

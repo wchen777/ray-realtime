@@ -72,6 +72,7 @@ void Realtime::initializeGL() {
     // initialize the shader
     Realtime::shader = ShaderLoader::createShaderProgram("resources/shaders/default.vert", "resources/shaders/default.frag");
 
+    // initilize all VBO and VAO data into the mesh objects
     Realtime::InitializeBuffers();
 }
 
@@ -84,13 +85,12 @@ void Realtime::paintGL() {
     // Bind the shader
     glUseProgram(Realtime::shader);
 
-//    glBindVertexArray(m_vao);
+    // initialize uniforms, not per object
+    Realtime::InitializeCameraUniforms();
+    Realtime::InitializeLightUniforms();
 
-    // Task 17: Draw your VAO here
-//    glDrawArrays(GL_TRIANGLES, 0, 3);
-
-    // Unbind VAO here
-    glBindVertexArray(0);
+    // initilialize uniforms per object, draw object
+    Realtime::DrawBuffers();
 
     // Unbind the shader
     glUseProgram(0);
@@ -102,10 +102,13 @@ void Realtime::resizeGL(int w, int h) {
     glViewport(0, 0, size().width() * m_devicePixelRatio, size().height() * m_devicePixelRatio);
 
     // Students: anything requiring OpenGL calls when the program starts should be done here
+    // what does this mean?
 
-    // TODO: not sure what exactly to do here
-    // include the rebuild scene stuff here.
-    // modify the camera's fields?
+    float aspectRatio = static_cast<float>(w) / static_cast<float>(h);
+
+    if (Realtime::sceneCamera.getAspectRatio() != aspectRatio) {
+        Realtime::sceneCamera.updateAspectRatio(aspectRatio);
+    }
 
 }
 

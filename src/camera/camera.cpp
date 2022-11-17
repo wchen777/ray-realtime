@@ -13,10 +13,10 @@ void Camera::setViewMatrices() {
 
     auto Mtranslate = getTranslationMatrix(-1 * Camera::pos[0], -1 * Camera::pos[1], -1 * Camera::pos[2]);
     auto Mrotate = glm::mat4(
-                u[0], v[0], w[0], 0,
-                u[1], v[1], w[1], 0,
-                u[2], v[2], w[2], 0,
-                0, 0, 0, 1.f
+                u[0], v[0], w[0], 0.f,
+                u[1], v[1], w[1], 0.f,
+                u[2], v[2], w[2], 0.f,
+                0.f, 0.f, 0.f, 1.f
             );
 
     auto viewM = Mrotate * Mtranslate;
@@ -29,13 +29,19 @@ void Camera::setViewMatrices() {
                     1.f, 0.f, 0.f, 0.f,
                     0.f, 1.f, 0.f, 0.f,
                     0.f, 0.f, 1/(1+c), -1.f,
-                    0.f, 0.f, -c/(1+c), 0.f
-                 );
+                    0.f, 0.f, -c/(1+c), 0.f);
+
     auto scaleMatrix = glm::mat4(
 
                 );
 
-    Camera::projMatrix = unhingingMatrix * scaleMatrix;
+    glm::mat4 zRemapMatrix = glm::mat4(
+                        1.f, 0.f, 0.f, 0.f,
+                        0.f, 1.f, 0.f, 0.f,
+                        0.f, 0.f, -2.f, 0.f,
+                        0.f, 0.f, -1.f, 1.f);
+
+    Camera::projMatrix = zRemapMatrix * unhingingMatrix * scaleMatrix;
     Camera::viewProjMatrix = Camera::viewMatrix * projMatrix; // MVP = V * P * M
 
 }
@@ -45,6 +51,12 @@ void Camera::updateViewPlanes(float farPlaneNew, float nearPlaneNew) {
     Camera::nearPlane = nearPlaneNew;
 
     Camera::setViewMatrices();
+}
+
+void Camera::updateAspectRatio(float aspectRatio) {
+    Camera::aspectRatio = aspectRatio;
+
+    setViewMatrices();
 }
 
 glm::mat4 Camera::getViewMatrix() const {

@@ -1,4 +1,5 @@
 #pragma once
+#include "utils/scenedata.h"
 #include <vector>
 #include <glm/glm.hpp>
 
@@ -28,7 +29,7 @@ class TrimeshData {
         // called when params are updated, creates the trimesh
         void UpdateParams(int p1, int p2) {
             m_param1 = p1;
-            m_param2 = p2;
+            m_param2 = std::max(p2, 3); // can't have theta splits less than 3, or we'll get a flat surface
             m_vertexData = std::vector<float>();
             SetVertexData();
         }
@@ -93,5 +94,7 @@ class TrimeshData {
         virtual ~TrimeshData() = default; // destructor
 
         virtual inline glm::vec3 ShapeNormal(glm::vec3& xyz) = 0; // the trimesh's custom normal function, if applicable
+
+        virtual PrimitiveType GetType() = 0;
 
 };

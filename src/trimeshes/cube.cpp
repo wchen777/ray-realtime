@@ -2,6 +2,13 @@
 
 
 /*
+ *  get type
+*/
+PrimitiveType Cube::GetType() {
+    return PrimitiveType::PRIMITIVE_CUBE;
+}
+
+/*
  * create a single side of the cube out of the 4 given points
 */
 void Cube::MakeFace(glm::vec3 topLeft,

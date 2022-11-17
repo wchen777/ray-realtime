@@ -5,6 +5,7 @@ class Cube : public TrimeshData {
 public:
     virtual inline glm::vec3 ShapeNormal(glm::vec3& xyz) override;
     virtual void SetVertexData() override;
+    virtual PrimitiveType GetType() override;
 
 private:
     void MakeWedge(float currTheta, float nextTheta);

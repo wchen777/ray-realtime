@@ -13,6 +13,8 @@ public:
 
     virtual void SetVertexData() override;
 
+    virtual PrimitiveType GetType() override;
+
 private:
     bool LoadOBJ(std::string filepath);
 };

@@ -1,6 +1,13 @@
 #include "obj_mesh.h"
 
 
+/*
+ *  get type
+*/
+PrimitiveType OBJMesh::GetType() {
+    return PrimitiveType::PRIMITIVE_MESH;
+}
+
 bool OBJMesh::LoadOBJ(std::string filepath) {
     std::vector<unsigned int> vertexIndices, uvIndices, normalIndices;
 

@@ -20,7 +20,7 @@ public:
        pos{glm::vec3(camData.pos)},
        up{glm::vec3(camData.up)},
        camData{camData},
-       aspectRatio{float(width) / float(height)},
+       aspectRatio{static_cast<float>(width) / static_cast<float>(height)},
        farPlane(farPlane),
        nearPlane(nearPlane)
     {
@@ -31,7 +31,7 @@ public:
     glm::vec3 look;
     glm::vec3 pos;
 
-    float aspectRatio;
+    float aspectRatio; // this is width / height!!
     float farPlane;
     float nearPlane;
 
@@ -54,6 +54,8 @@ public:
     glm::mat4 getInvViewMatrix() const;
     glm::mat4 getProjMatrix() const;
     glm::mat4 getViewProjMatrix() const;
+
+    void updateAspectRatio(float aspectRatio);
 
     // Returns the aspect ratio of the camera.
     float getAspectRatio() const;
