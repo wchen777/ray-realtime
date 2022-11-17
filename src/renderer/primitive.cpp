@@ -6,6 +6,7 @@
 #include "../trimeshes/cone.h"
 #include "../trimeshes/sphere.h"
 #include "../trimeshes/cylinder.h"
+#include "../trimeshes/obj_mesh.h"
 
 /*
  * turn the parsed shapes into scene primitive mesh structs.
@@ -39,6 +40,9 @@ void Realtime::CompilePrimitiveMeshes() {
             break;
         case PrimitiveType::PRIMITIVE_CONE:
             trimesh = new Cone();
+            break;
+        case PrimitiveType::PRIMITIVE_MESH:
+            trimesh = new OBJMesh(obj.primitive.meshfile);
             break;
         default:
             trimesh = new Cube();
@@ -80,3 +84,5 @@ void Realtime::DestroyMeshes() {
         delete trimesh.trimesh;
     }
 }
+
+

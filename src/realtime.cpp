@@ -1,4 +1,5 @@
 #include "realtime.h"
+#define GL_SILENCE_DEPRECATION
 
 #include <QCoreApplication>
 #include <QMouseEvent>
@@ -6,6 +7,7 @@
 #include <iostream>
 #include "settings.h"
 #include "utils/shaderloader.h"
+
 
 // ================== Project 5: Lights, Camera
 
@@ -34,6 +36,11 @@ void Realtime::finish() {
 
     glDeleteProgram(Realtime::shader);
     Realtime::DestroyMeshes();
+
+    for (MeshPrimitive& mesh : Realtime::objectMeshes) {
+        glDeleteBuffers(1, &mesh.vbo);
+        glDeleteVertexArrays(1, &mesh.vao);
+    }
 
     this->doneCurrent();
 }
@@ -65,12 +72,7 @@ void Realtime::initializeGL() {
     // initialize the shader
     Realtime::shader = ShaderLoader::createShaderProgram("resources/shaders/default.vert", "resources/shaders/default.frag");
 
-    // bind object vbo's
-    // create vao's
-
-    // etc. etc.
-
-    // unbind
+    Realtime::InitializeBuffers();
 }
 
 void Realtime::paintGL() {

@@ -26,18 +26,27 @@ public:
     void sceneChanged();
     void settingsChanged();
 
+    // necessary for scene and views
     SceneParser sceneParser = SceneParser{};                          // initialize the scene parser
     RenderData sceneRenderData;
     Camera sceneCamera;
     GLuint shader;
 
+    // mesh related fields
     void CompilePrimitiveMeshes();
     void UpdateTesselations();
     void DestroyMeshes();
     std::vector<MeshPrimitive> objectMeshes;
 
+    // tesselation params
     int currentParam1;
     int currentParam2;
+
+    // VBO/VAO, OpenGL stuff
+    void InitializeBuffers();
+    void InitializeLightUniforms();
+    void InitializeCameraUniforms();
+    void DrawBuffers();
 
 
 public slots:

@@ -41,6 +41,8 @@ public:
     glm::mat4 viewMatrix;
     glm::mat4 projMatrix;
 
+    glm::mat4 viewProjMatrix; // VP matrix
+
 
     void setViewMatrices(); // set the view matrix fields
 
@@ -48,9 +50,10 @@ public:
 
     // Returns the view matrix for the current camera settings.
     // You might also want to define another function that return the inverse of the view matrix.
-    inline glm::mat4 getViewMatrix() const;
-    inline glm::mat4 getInvViewMatrix() const;
-    inline glm::mat4 getProjMatrix() const;
+    glm::mat4 getViewMatrix() const;
+    glm::mat4 getInvViewMatrix() const;
+    glm::mat4 getProjMatrix() const;
+    glm::mat4 getViewProjMatrix() const;
 
     // Returns the aspect ratio of the camera.
     float getAspectRatio() const;

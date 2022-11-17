@@ -40,6 +40,7 @@ add_executable(${PROJECT_NAME}
     src/trimeshes/cylinder.cpp
     src/trimeshes/obj_mesh.cpp
     src/renderer/primitive.cpp
+    src/renderer/render.cpp
 
     src/mainwindow.h
     src/realtime.h

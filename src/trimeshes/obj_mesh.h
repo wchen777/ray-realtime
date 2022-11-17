@@ -5,6 +5,9 @@
 
 class OBJMesh : public TrimeshData {
 public:
+    OBJMesh(std::string filepath) {
+        LoadOBJ(filepath);
+    }
     // unused
     virtual inline glm::vec3 ShapeNormal(glm::vec3& xyz) override;
 
