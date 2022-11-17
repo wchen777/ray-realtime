@@ -25,17 +25,17 @@ void Camera::setViewMatrices() {
     Camera::invViewMatrix = glm::inverse(viewM);
 
     auto c = -Camera::nearPlane / Camera::farPlane;
-    auto perspectiveMatrix = glm::mat4(
+    auto unhingingMatrix = glm::mat4(
                     1.f, 0.f, 0.f, 0.f,
                     0.f, 1.f, 0.f, 0.f,
                     0.f, 0.f, 1/(1+c), -1.f,
                     0.f, 0.f, -c/(1+c), 0.f
                  );
-
-    Camera::projMatrix = glm::mat4(
-
+    auto scaleMatrix = glm::mat4(
 
                 );
+
+    Camera::projMatrix = unhingingMatrix * scaleMatrix;
 }
 
 glm::mat4 Camera::getViewMatrix() const {

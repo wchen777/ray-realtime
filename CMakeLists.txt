@@ -34,6 +34,10 @@ add_executable(${PROJECT_NAME}
     src/utils/sceneparser.cpp
     src/camera/camera.cpp
     src/camera/transforms.cpp
+    src/trimeshes/cube.cpp
+    src/trimeshes/cone.cpp
+    src/trimeshes/sphere.cpp
+    src/trimeshes/cylinder.cpp
 
     src/mainwindow.h
     src/realtime.h
@@ -44,6 +48,11 @@ add_executable(${PROJECT_NAME}
     src/utils/shaderloader.h
     src/camera/camera.h
     src/camera/transforms.h
+    src/trimeshes/trimesh.h
+    src/trimeshes/cube.h
+    src/trimeshes/cone.h
+    src/trimeshes/sphere.h
+    src/trimeshes/cylinder.h
 )
 
 # GLM: this creates its library and allows you to `#include "glm/..."`
