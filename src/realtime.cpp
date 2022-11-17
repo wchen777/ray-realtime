@@ -76,6 +76,23 @@ void Realtime::initializeGL() {
 void Realtime::paintGL() {
     // Students: anything requiring OpenGL calls every frame should be done here
 
+    // Task 15: Clear the screen here
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    // Bind the shader
+    glUseProgram(Realtime::shader);
+
+//    glBindVertexArray(m_vao);
+
+    // Task 17: Draw your VAO here
+//    glDrawArrays(GL_TRIANGLES, 0, 3);
+
+    // Unbind VAO here
+    glBindVertexArray(0);
+
+    // Unbind the shader
+    glUseProgram(0);
+
 }
 
 void Realtime::resizeGL(int w, int h) {
@@ -91,7 +108,6 @@ void Realtime::resizeGL(int w, int h) {
 }
 
 void Realtime::sceneChanged() {
-
     // TODOs:
 
     // destroy old meshes

@@ -38,6 +38,7 @@ add_executable(${PROJECT_NAME}
     src/trimeshes/cone.cpp
     src/trimeshes/sphere.cpp
     src/trimeshes/cylinder.cpp
+    src/trimeshes/obj_mesh.cpp
     src/renderer/primitive.cpp
 
     src/mainwindow.h
@@ -54,6 +55,7 @@ add_executable(${PROJECT_NAME}
     src/trimeshes/cone.h
     src/trimeshes/sphere.h
     src/trimeshes/cylinder.h
+    src/trimeshes/obj_mesh.h
     src/renderer/debug.h
     src/renderer/primitive.h
 )

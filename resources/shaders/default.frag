@@ -12,7 +12,8 @@ uniform float k_a;
 
 // for diffuse lighting
 uniform float k_d;
-uniform vec3 light_pos;
+uniform vec3 light_dirs[8];
+uniform vec3 light_positions[8];
 
 // for specular lighting
 uniform float shininess;

@@ -1,7 +1,7 @@
 #include "trimesh.h"
 
 // derived class for a cube from trimesh implicit
-class Cone : public TrimeshImplicit {
+class Cone : public TrimeshData {
 public:
     virtual inline glm::vec3 ShapeNormal(glm::vec3& xyz) override;
     virtual void SetVertexData() override;

@@ -7,7 +7,7 @@
 #include <vector>
 
 struct MeshPrimitive {
-    TrimeshImplicit* trimesh;
+    TrimeshData* trimesh;
     PrimitiveType type;
     SceneMaterial* material;
     glm::mat4 modelMatrix;

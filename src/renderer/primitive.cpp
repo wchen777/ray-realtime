@@ -23,7 +23,9 @@ void Realtime::CompilePrimitiveMeshes() {
 
         MeshPrimitive prim = MeshPrimitive{}; // the primitive
 
-        TrimeshImplicit * trimesh; // the trimesh abstract class
+        // TODO: trimesh OBJ stuff
+
+        TrimeshData* trimesh; // the trimesh abstract class
 
         switch (obj.primitive.type) {
         case PrimitiveType::PRIMITIVE_CUBE:

@@ -8,9 +8,9 @@
 #define EPSILON_OFF 0.001
 
 /*
- * an abstract class representing a general trimesh
+ * an abstract class representing a general trimesh.
 */
-class TrimeshImplicit {
+class TrimeshData {
     public:
 
         std::vector<float> m_vertexData; // the trimesh's vertex data
@@ -90,9 +90,8 @@ class TrimeshImplicit {
 
         virtual void SetVertexData() = 0; // function set the vertex data, effectively rebuilding the trimesh
 
-        virtual ~TrimeshImplicit() = default; // destructor
+        virtual ~TrimeshData() = default; // destructor
 
         virtual inline glm::vec3 ShapeNormal(glm::vec3& xyz) = 0; // the trimesh's custom normal function, if applicable
-
 
 };

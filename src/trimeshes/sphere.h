@@ -2,7 +2,7 @@
 
 #include "trimesh.h"
 
-class Sphere : public TrimeshImplicit {
+class Sphere : public TrimeshData {
 public:
     virtual inline glm::vec3 ShapeNormal(glm::vec3& xyz) override;
 
