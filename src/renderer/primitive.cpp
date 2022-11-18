@@ -51,8 +51,10 @@ void Realtime::CompilePrimitiveMeshes() {
             break;
         }
 
-        // this builds the trimesh.
-        trimesh->UpdateParams(settings.shapeParameter1, settings.shapeParameter2);
+        if (obj.primitive.type != PrimitiveType::PRIMITIVE_MESH) {
+            // this builds the trimesh.
+            trimesh->UpdateParams(settings.shapeParameter1, settings.shapeParameter2);
+        }
 
         // set all remaining fields
         prim.trimesh = trimesh;

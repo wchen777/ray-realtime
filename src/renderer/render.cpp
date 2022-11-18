@@ -26,6 +26,8 @@ void Realtime::InitializeBuffers() {
         glBindVertexArray(mesh.vao);
 
         std::cout << mesh.vao << " vao" << std::endl;
+        std::cout << mesh.trimesh->m_vertexData.size() << std::endl;
+
 
         // Enable and define attribute 0 to store vertex positions (vec3)
         glEnableVertexAttribArray(0);
@@ -88,8 +90,6 @@ void Realtime::InitializeLightUniforms() {
 
         count++;
     }
-
-    std::cout << "num lights " << count << std::endl;
 
     // num lights uniform
     GLint num_lights_loc = glGetUniformLocation(Realtime::shader, "num_lights");

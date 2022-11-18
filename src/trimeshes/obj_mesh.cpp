@@ -31,6 +31,8 @@ bool OBJMesh::LoadOBJ(std::string filepath) {
         return false;
     }
 
+    int line = 1;
+
     // keep going throughout the file until we reach EOF, read in all data
     while (1) {
 
@@ -71,8 +73,15 @@ bool OBJMesh::LoadOBJ(std::string filepath) {
                                  &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1],
                                  &normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2]);
             if (matches != 9){
-                std::cout << "Could not parse line with face data" << std::endl;
-                return false;
+                matches = fscanf(file, "%d//%d %d//%d %d//%d\n",
+                                     &vertexIndex[0], &normalIndex[0], &vertexIndex[1],
+                                     &normalIndex[1], &vertexIndex[2], &normalIndex[2]);
+                if (matches != 4) {
+                    std::cout << "Could not parse line with face data, matches: " << matches << std::endl;
+                    std::cout << "Line #" << line << std::endl;
+                    return false;
+                }
+
             }
 
             // add to our indices vector
@@ -90,6 +99,8 @@ bool OBJMesh::LoadOBJ(std::string filepath) {
             //            uvIndices.push_back(uvIndex[2]);
 
         }
+
+        line++;
     }
 
     assert(vertexIndices.size() == normalIndices.size());
@@ -107,6 +118,7 @@ bool OBJMesh::LoadOBJ(std::string filepath) {
         OBJMesh::insertVec3(OBJMesh::m_vertexData, normal);
     }
 
+    std::cout << "Successfully read in " << m_vertexData.size() << " indices" << std::endl;
 
     return true;
 }

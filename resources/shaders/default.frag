@@ -112,8 +112,10 @@ void main() {
         // direciton to light differs between light types
         vec3 L = vec3(0.f);
 
-        if (light_types[i] == 1) {
+        if (light_types[i] == 1) { // directional
             L = normalize(-1 * light_dirs[i]);
+        } else if (light_types[i] == 0) { // point
+            L = normalize(light_positions[i] - vertex_pos_world);
         } else {
             continue;
         }
