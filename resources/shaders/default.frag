@@ -61,13 +61,23 @@ vec3 Phong() {
         // direciton to light differs between light types
         vec3 L = vec3(0.f);
 
-        // for diffuse
-        switch(light_types[i]) {
-        case 1:
-            L = normalize(light_positions[i] - vertex_pos_world);
-        default:
-            continue; // ignore other light types for now
+        if (light_types[i] == 1) {
+            L = normalize(-1 * light_dirs[i]);
+        } else {
+            continue;
         }
+
+        // for diffuse
+//        switch(light_types[i]) {
+////        case 0:
+////             L = normalize(light_positions[i] - vertex_pos_world);
+////            break;
+//        case 1: // direction
+//            L = normalize(-1 * light_dirs[i]);
+//            break;
+//        default:
+//            continue; // ignore other light types for now
+//        }
 
         float NdotL = dot(N, L);
 
@@ -83,5 +93,6 @@ vec3 Phong() {
 }
 
 void main() {
-    output_color = vec4(Phong(), 1.f);
+//    output_color = vec4(Phong(), 1.f);
+    output_color = vec4(0.5f);
 }

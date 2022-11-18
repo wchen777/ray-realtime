@@ -21,6 +21,7 @@ void main() {
     // vertex world space normal for lighting
     vertex_norm_world = vec3(inv_trans_model_matrix * vec4(vertex_norm_obj, 0.0));
 
+//    gl_Position = vec4(vertex_pos_obj, 1.0);
     // set position on screen to be the object space position transformed to clip space
     gl_Position = (VP_matrix * model_matrix) * vec4(vertex_pos_obj, 1.0);
 }

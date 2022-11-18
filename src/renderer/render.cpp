@@ -1,4 +1,6 @@
 #include "realtime.h"
+#include <iostream>
+#include <ostream>
 
 #define MAX_LIGHTS 8
 
@@ -22,6 +24,8 @@ void Realtime::InitializeBuffers() {
         // Generate, and bind VAO
         glGenVertexArrays(1, &mesh.vao);
         glBindVertexArray(mesh.vao);
+
+        std::cout << mesh.vao << " vao" << std::endl;
 
         // Enable and define attribute 0 to store vertex positions (vec3)
         glEnableVertexAttribArray(0);
@@ -81,6 +85,8 @@ void Realtime::InitializeLightUniforms() {
         // light type uniform
         GLint light_type_loc = glGetUniformLocation(Realtime::shader, ("light_types[" + std::to_string(count) + "]").c_str());
         glUniform1i(light_type_loc, static_cast<std::underlying_type_t<LightType>>(light.type));
+
+        count++;
     }
 
 
@@ -95,10 +101,10 @@ void Realtime::InitializeCameraUniforms() {
 
     // pass in VP matrix as a uniform (VP is already calculated in camera)
     GLint VP_mat_loc = glGetUniformLocation(Realtime::shader, "VP_matrix");
-    glUniformMatrix4fv(VP_mat_loc, 1, GL_FALSE, &Realtime::sceneCamera.getViewProjMatrix()[0][0]);
+    glUniformMatrix4fv(VP_mat_loc, 1, GL_FALSE, &Realtime::sceneCamera->getViewProjMatrix()[0][0]);
 
     GLint cam_pos_loc = glGetUniformLocation(Realtime::shader, "cam_pos");
-    glUniform3fv(cam_pos_loc, 1, &Realtime::sceneCamera.pos[0]);
+    glUniform3fv(cam_pos_loc, 1, &Realtime::sceneCamera->pos[0]);
 
     this->doneCurrent();
 }
@@ -111,6 +117,9 @@ void Realtime::DrawBuffers() {
 
     // initialize uniforms, draw the object
     for (MeshPrimitive& mesh : Realtime::objectMeshes) {
+
+//        std::cout << mesh.vao << std::endl;
+
         // bind the object's vao
         glBindVertexArray(mesh.vao);
 

@@ -37,6 +37,7 @@ void Realtime::finish() {
     glDeleteProgram(Realtime::shader);
     Realtime::DestroyMeshes();
 
+    // destroy all buffers
     for (MeshPrimitive& mesh : Realtime::objectMeshes) {
         glDeleteBuffers(1, &mesh.vbo);
         glDeleteVertexArrays(1, &mesh.vao);
@@ -46,6 +47,9 @@ void Realtime::finish() {
 }
 
 void Realtime::initializeGL() {
+
+    std::cout << "initialize" << std::endl;
+
     m_devicePixelRatio = this->devicePixelRatio();
 
     m_timer = startTimer(1000/60);
@@ -70,14 +74,27 @@ void Realtime::initializeGL() {
     // Students: anything requiring OpenGL calls when the program starts should be done here
 
     // initialize the shader
-    Realtime::shader = ShaderLoader::createShaderProgram("resources/shaders/default.vert", "resources/shaders/default.frag");
+    Realtime::shader = ShaderLoader::createShaderProgram(":/resources/shaders/default.vert", ":/resources/shaders/default.frag");
 
-    // initilize all VBO and VAO data into the mesh objects
-    Realtime::InitializeBuffers();
+
+//    Realtime::InitializeBuffers();
 }
 
 void Realtime::paintGL() {
     // Students: anything requiring OpenGL calls every frame should be done here
+
+    if (!Realtime::isInitialized) {
+        return;
+    }
+
+    // if we have freshly loaded in a scene, initailize the buffers only once
+    if (Realtime::changedScene) {
+        // initilize all VBO and VAO data into the mesh objects
+        Realtime::InitializeBuffers();
+        Realtime::changedScene = false;
+    }
+
+//    std::cout << "paint gl loop" << std::endl;
 
     // Task 15: Clear the screen here
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -98,25 +115,41 @@ void Realtime::paintGL() {
 }
 
 void Realtime::resizeGL(int w, int h) {
+
+    std::cout << "resize" << std::endl;
     // Tells OpenGL how big the screen is
     glViewport(0, 0, size().width() * m_devicePixelRatio, size().height() * m_devicePixelRatio);
+
+    // if the scene isn't initialized yet
+    if (!Realtime::isInitialized) {
+        return;
+    }
 
     // Students: anything requiring OpenGL calls when the program starts should be done here
     // what does this mean?
 
     float aspectRatio = static_cast<float>(w) / static_cast<float>(h);
 
-    if (Realtime::sceneCamera.getAspectRatio() != aspectRatio) {
-        Realtime::sceneCamera.updateAspectRatio(aspectRatio);
+    if (Realtime::sceneCamera->getAspectRatio() != aspectRatio) {
+        Realtime::sceneCamera->updateAspectRatio(aspectRatio);
     }
+
+    Realtime::InitializeBuffers();
 
 }
 
 void Realtime::sceneChanged() {
     // TODOs:
+    std::cout << "scene changed" << std::endl;
 
     // destroy old meshes
     Realtime::DestroyMeshes();
+
+    // destroy old buffers
+    for (MeshPrimitive& mesh : Realtime::objectMeshes) {
+        glDeleteBuffers(1, &mesh.vbo);
+        glDeleteVertexArrays(1, &mesh.vao);
+    }
 
     // set current params (for on startup)
     Realtime::currentParam1 = settings.shapeParameter1;
@@ -125,20 +158,29 @@ void Realtime::sceneChanged() {
     // parse the scene that was stored in settings from the call to upload scenefile
     Realtime::sceneParser.parse(settings.sceneFilePath, Realtime::sceneRenderData);
     Camera cam(Realtime::sceneRenderData.cameraData, size().height(), size().width(), settings.farPlane, settings.nearPlane);
-    Realtime::sceneCamera = cam;
+    Realtime::sceneCamera = &cam;
 
     // build each primitive into a composite struct that contains the class for the trimesh, etc.
     // apply it to the realtime class
     Realtime::CompilePrimitiveMeshes();
 
+    Realtime::isInitialized = true;
+    Realtime::changedScene = true;
+
     update(); // asks for a PaintGL() call to occur
 }
 
 void Realtime::settingsChanged() {
+    std::cout << "sttings changed" << std::endl;
+
+    // if scene camera is null, the scene isn't initialized yet
+    if (!Realtime::isInitialized) {
+        return;
+    }
 
     // near plane and far plane updates
-    if (Realtime::sceneCamera.nearPlane != settings.nearPlane || Realtime::sceneCamera.farPlane != settings.farPlane) {
-        Realtime::sceneCamera.updateViewPlanes(settings.farPlane, settings.nearPlane);
+    if (Realtime::sceneCamera->nearPlane != settings.nearPlane || Realtime::sceneCamera->farPlane != settings.farPlane) {
+        Realtime::sceneCamera->updateViewPlanes(settings.farPlane, settings.nearPlane);
     }
 
     // updates for tesselation params

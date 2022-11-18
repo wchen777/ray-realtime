@@ -22,6 +22,8 @@ void Realtime::CompilePrimitiveMeshes() {
     // go through each object and create a trimesh for them
     for (auto& obj : objs) {
 
+        std::cout << "a shape" << std::endl;
+
         MeshPrimitive prim = MeshPrimitive{}; // the primitive
 
         // TODO: trimesh OBJ stuff
@@ -59,7 +61,10 @@ void Realtime::CompilePrimitiveMeshes() {
         prim.modelMatrix = obj.ctm;
         prim.material = &obj.primitive.material;
 
+        std::cout << prim.trimesh->m_vertexData.size() << std::endl;
+
         Realtime::objectMeshes.emplace_back(prim);
+
     }
 
 }

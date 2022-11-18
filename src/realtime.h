@@ -29,7 +29,7 @@ public:
     // necessary for scene and views
     SceneParser sceneParser = SceneParser{};                          // initialize the scene parser
     RenderData sceneRenderData;
-    Camera sceneCamera;
+    Camera* sceneCamera = NULL;
     GLuint shader;
 
     // mesh related fields
@@ -47,6 +47,9 @@ public:
     void InitializeLightUniforms();
     void InitializeCameraUniforms();
     void DrawBuffers();
+
+    bool isInitialized = false;
+    bool changedScene = false;
 
 
 public slots:

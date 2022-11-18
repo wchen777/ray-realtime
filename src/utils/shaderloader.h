@@ -8,10 +8,12 @@
 #include <QFile>
 #include <QTextStream>
 #include <iostream>
+#include "../renderer/debug.h"
 
 class ShaderLoader{
 public:
     static GLuint createShaderProgram(const char * vertex_file_path, const char * fragment_file_path){
+
         // Create and compile the shaders.
         GLuint vertexShaderID = createShader(GL_VERTEX_SHADER, vertex_file_path);
         GLuint fragmentShaderID = createShader(GL_FRAGMENT_SHADER, fragment_file_path);
@@ -22,8 +24,12 @@ public:
         glAttachShader(programID, fragmentShaderID);
         glLinkProgram(programID);
 
+//        std::cout << programID << std::endl;
+//        std::cout << fragmentShaderID << std::endl;
+
         // Print the info log if error
         GLint status;
+        Debug::glErrorCheck();
         glGetProgramiv(programID, GL_LINK_STATUS, &status);
 
         if (status == GL_FALSE) {
@@ -32,7 +38,6 @@ public:
 
             std::string log(length, '\0');
             glGetProgramInfoLog(programID, length, nullptr, &log[0]);
-
             glDeleteProgram(programID);
             throw std::runtime_error(log);
         }

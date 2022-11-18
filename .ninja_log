@@ -1,0 +1,92 @@
+# ninja log v5
+0	132	1668728822720764569	StaticGLEW_autogen/timestamp	373ff1ccb90a9311
+0	132	1668728822720764569	StaticGLEW_autogen/mocs_compilation.cpp	373ff1ccb90a9311
+0	132	1668728822720764569	/Users/wchen/Documents/07 Sem/graphics/projects-realtime-wchen777/StaticGLEW_autogen/timestamp	373ff1ccb90a9311
+0	132	1668728822720764569	/Users/wchen/Documents/07 Sem/graphics/projects-realtime-wchen777/StaticGLEW_autogen/mocs_compilation.cpp	373ff1ccb90a9311
+133	185	1668728822783825958	CMakeFiles/StaticGLEW.dir/StaticGLEW_autogen/mocs_compilation.cpp.o	90d3bb9d988b0732
+133	761	1668728823353687112	CMakeFiles/StaticGLEW.dir/glew/src/glew.c.o	5b6fc9d1fc208c0
+761	842	1668728823443626000	libStaticGLEW.a	9333471c980f357
+842	1377	1668728823951906761	projects_realtime_autogen/timestamp	216b7c20258b5a75
+842	1377	1668728823951906761	projects_realtime_autogen/mocs_compilation.cpp	216b7c20258b5a75
+842	1377	1668728823951906761	/Users/wchen/Documents/07 Sem/graphics/projects-realtime-wchen777/projects_realtime_autogen/timestamp	216b7c20258b5a75
+842	1377	1668728823951906761	/Users/wchen/Documents/07 Sem/graphics/projects-realtime-wchen777/projects_realtime_autogen/mocs_compilation.cpp	216b7c20258b5a75
+1377	1405	1668728824006434888	.rcc/qrc_Resources.cpp	bb8df57bb42796ab
+1377	1405	1668728824006434888	/Users/wchen/Documents/07 Sem/graphics/projects-realtime-wchen777/.rcc/qrc_Resources.cpp	bb8df57bb42796ab
+1409	2143	1668728824736262094	CMakeFiles/projects_realtime.dir/src/camera/transforms.cpp.o	de84687716e5550b
+1406	2707	1668728825298056902	CMakeFiles/projects_realtime.dir/src/settings.cpp.o	903c7926918ca099
+1408	3221	1668728825809183589	CMakeFiles/projects_realtime.dir/src/camera/camera.cpp.o	4039ed7778986e37
+1412	3233	1668728825817968038	CMakeFiles/projects_realtime.dir/src/trimeshes/cube.cpp.o	f66fa05790cf132f
+2144	3734	1668728826325362740	CMakeFiles/projects_realtime.dir/src/trimeshes/cone.cpp.o	65f9d7d5639811ce
+2709	4280	1668728826866269022	CMakeFiles/projects_realtime.dir/src/trimeshes/sphere.cpp.o	19f8c723edd5351a
+1407	4331	1668728826919136957	CMakeFiles/projects_realtime.dir/src/utils/sceneparser.cpp.o	8e80d94505e231dc
+4332	4415	1668728827011673490	CMakeFiles/projects_realtime.dir/.rcc/qrc_Resources.cpp.o	5751c349a273a088
+3221	4781	1668728827372462441	CMakeFiles/projects_realtime.dir/src/trimeshes/cylinder.cpp.o	3b4c42aa48341d79
+3233	5179	1668728827768805611	CMakeFiles/projects_realtime.dir/src/trimeshes/obj_mesh.cpp.o	39094c2b57adbe3
+1405	5193	1668728827776484173	CMakeFiles/projects_realtime.dir/projects_realtime_autogen/mocs_compilation.cpp.o	e318a10096050f25
+1406	5348	1668728827934714395	CMakeFiles/projects_realtime.dir/src/main.cpp.o	9f9528bc76babd12
+1406	5526	1668728828112068489	CMakeFiles/projects_realtime.dir/src/mainwindow.cpp.o	e5fe957715b92319
+1407	5547	1668728828136932463	CMakeFiles/projects_realtime.dir/src/utils/scenefilereader.cpp.o	4c1a99cbf09f71e5
+1406	5606	1668728828196132312	CMakeFiles/projects_realtime.dir/src/realtime.cpp.o	cfde096fc9745d70
+3735	6276	1668728828865592150	CMakeFiles/projects_realtime.dir/src/renderer/primitive.cpp.o	bfe9abdadbda3031
+4280	6352	1668728828928023918	CMakeFiles/projects_realtime.dir/src/renderer/render.cpp.o	30907c8ae181e514
+6353	6537	1668728829124266055	projects_realtime	48b9c43c82c5f9f1
+13	150	1668729131044664783	projects_realtime_autogen/timestamp	216b7c20258b5a75
+13	150	1668729131044664783	projects_realtime_autogen/mocs_compilation.cpp	216b7c20258b5a75
+13	150	1668729131044664783	/Users/wchen/Documents/07 Sem/graphics/projects-realtime-wchen777/projects_realtime_autogen/timestamp	216b7c20258b5a75
+13	150	1668729131044664783	/Users/wchen/Documents/07 Sem/graphics/projects-realtime-wchen777/projects_realtime_autogen/mocs_compilation.cpp	216b7c20258b5a75
+155	3777	1668729134659997790	CMakeFiles/projects_realtime.dir/src/realtime.cpp.o	cfde096fc9745d70
+3777	3978	1668729134860854294	projects_realtime	48b9c43c82c5f9f1
+7	72	1668729217900059441	projects_realtime_autogen/timestamp	216b7c20258b5a75
+7	72	1668729217900059441	projects_realtime_autogen/mocs_compilation.cpp	216b7c20258b5a75
+7	72	1668729217900059441	/Users/wchen/Documents/07 Sem/graphics/projects-realtime-wchen777/projects_realtime_autogen/timestamp	216b7c20258b5a75
+7	72	1668729217900059441	/Users/wchen/Documents/07 Sem/graphics/projects-realtime-wchen777/projects_realtime_autogen/mocs_compilation.cpp	216b7c20258b5a75
+74	2111	1668729219927328103	CMakeFiles/projects_realtime.dir/src/realtime.cpp.o	cfde096fc9745d70
+2111	2303	1668729220122217443	projects_realtime	48b9c43c82c5f9f1
+11	81	1668729360598441694	projects_realtime_autogen/timestamp	216b7c20258b5a75
+11	81	1668729360598441694	projects_realtime_autogen/mocs_compilation.cpp	216b7c20258b5a75
+11	81	1668729360598441694	/Users/wchen/Documents/07 Sem/graphics/projects-realtime-wchen777/projects_realtime_autogen/timestamp	216b7c20258b5a75
+11	81	1668729360598441694	/Users/wchen/Documents/07 Sem/graphics/projects-realtime-wchen777/projects_realtime_autogen/mocs_compilation.cpp	216b7c20258b5a75
+85	3701	1668729364198763418	CMakeFiles/projects_realtime.dir/src/realtime.cpp.o	cfde096fc9745d70
+3701	3985	1668729364483153078	projects_realtime	48b9c43c82c5f9f1
+11	91	1668729383485099737	projects_realtime_autogen/timestamp	216b7c20258b5a75
+11	91	1668729383485099737	projects_realtime_autogen/mocs_compilation.cpp	216b7c20258b5a75
+11	91	1668729383485099737	/Users/wchen/Documents/07 Sem/graphics/projects-realtime-wchen777/projects_realtime_autogen/timestamp	216b7c20258b5a75
+11	91	1668729383485099737	/Users/wchen/Documents/07 Sem/graphics/projects-realtime-wchen777/projects_realtime_autogen/mocs_compilation.cpp	216b7c20258b5a75
+95	3241	1668729386624194368	CMakeFiles/projects_realtime.dir/src/realtime.cpp.o	cfde096fc9745d70
+3241	3409	1668729386792921126	projects_realtime	48b9c43c82c5f9f1
+11	86	1668729399852248192	projects_realtime_autogen/timestamp	216b7c20258b5a75
+11	86	1668729399852248192	projects_realtime_autogen/mocs_compilation.cpp	216b7c20258b5a75
+11	86	1668729399852248192	/Users/wchen/Documents/07 Sem/graphics/projects-realtime-wchen777/projects_realtime_autogen/timestamp	216b7c20258b5a75
+11	86	1668729399852248192	/Users/wchen/Documents/07 Sem/graphics/projects-realtime-wchen777/projects_realtime_autogen/mocs_compilation.cpp	216b7c20258b5a75
+90	3379	1668729403124122017	CMakeFiles/projects_realtime.dir/src/realtime.cpp.o	cfde096fc9745d70
+3379	3644	1668729403393737343	projects_realtime	48b9c43c82c5f9f1
+16	85	1668729641748819455	projects_realtime_autogen/timestamp	216b7c20258b5a75
+16	85	1668729641748819455	projects_realtime_autogen/mocs_compilation.cpp	216b7c20258b5a75
+16	85	1668729641748819455	/Users/wchen/Documents/07 Sem/graphics/projects-realtime-wchen777/projects_realtime_autogen/timestamp	216b7c20258b5a75
+16	85	1668729641748819455	/Users/wchen/Documents/07 Sem/graphics/projects-realtime-wchen777/projects_realtime_autogen/mocs_compilation.cpp	216b7c20258b5a75
+88	124	1668729641787565668	.rcc/qrc_Resources.cpp	bb8df57bb42796ab
+88	124	1668729641787565668	/Users/wchen/Documents/07 Sem/graphics/projects-realtime-wchen777/.rcc/qrc_Resources.cpp	bb8df57bb42796ab
+124	488	1668729642145780104	CMakeFiles/projects_realtime.dir/.rcc/qrc_Resources.cpp.o	5751c349a273a088
+124	3101	1668729644749100386	CMakeFiles/projects_realtime.dir/src/realtime.cpp.o	cfde096fc9745d70
+3101	3357	1668729645007910334	projects_realtime	48b9c43c82c5f9f1
+18	46	1668729691554780922	.rcc/qrc_Resources.cpp	bb8df57bb42796ab
+18	46	1668729691554780922	/Users/wchen/Documents/07 Sem/graphics/projects-realtime-wchen777/.rcc/qrc_Resources.cpp	bb8df57bb42796ab
+46	120	1668729691625847416	CMakeFiles/projects_realtime.dir/.rcc/qrc_Resources.cpp.o	5751c349a273a088
+120	268	1668729691764633768	projects_realtime	48b9c43c82c5f9f1
+9	90	1668729835162638860	projects_realtime_autogen/timestamp	216b7c20258b5a75
+9	90	1668729835162638860	projects_realtime_autogen/mocs_compilation.cpp	216b7c20258b5a75
+9	90	1668729835162638860	/Users/wchen/Documents/07 Sem/graphics/projects-realtime-wchen777/projects_realtime_autogen/timestamp	216b7c20258b5a75
+9	90	1668729835162638860	/Users/wchen/Documents/07 Sem/graphics/projects-realtime-wchen777/projects_realtime_autogen/mocs_compilation.cpp	216b7c20258b5a75
+93	130	1668729835202400251	.rcc/qrc_Resources.cpp	bb8df57bb42796ab
+93	130	1668729835202400251	/Users/wchen/Documents/07 Sem/graphics/projects-realtime-wchen777/.rcc/qrc_Resources.cpp	bb8df57bb42796ab
+131	219	1668729835287576026	CMakeFiles/projects_realtime.dir/.rcc/qrc_Resources.cpp.o	5751c349a273a088
+130	3364	1668729838421178819	CMakeFiles/projects_realtime.dir/src/realtime.cpp.o	cfde096fc9745d70
+3364	3559	1668729838620642525	projects_realtime	48b9c43c82c5f9f1
+11	81	1668731559652101944	.rcc/qrc_Resources.cpp	bb8df57bb42796ab
+11	81	1668731559652101944	/Users/wchen/Documents/07 Sem/graphics/projects-realtime-wchen777/.rcc/qrc_Resources.cpp	bb8df57bb42796ab
+82	753	1668731560317762269	CMakeFiles/projects_realtime.dir/.rcc/qrc_Resources.cpp.o	5751c349a273a088
+754	1046	1668731560608873947	projects_realtime	48b9c43c82c5f9f1
+8	36	1668731626379366308	.rcc/qrc_Resources.cpp	bb8df57bb42796ab
+8	36	1668731626379366308	/Users/wchen/Documents/07 Sem/graphics/projects-realtime-wchen777/.rcc/qrc_Resources.cpp	bb8df57bb42796ab
+36	98	1668731626438738618	CMakeFiles/projects_realtime.dir/.rcc/qrc_Resources.cpp.o	5751c349a273a088
+98	272	1668731626606767493	projects_realtime	48b9c43c82c5f9f1

@@ -13,7 +13,7 @@
 class Camera {
 public:
 
-    Camera(); // default constructor
+//    Camera(); // default constructor
 
     Camera(SceneCameraData camData, int height, int width, float farPlane, float nearPlane) :
        look{glm::vec3(camData.look)},

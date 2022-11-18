@@ -2,6 +2,14 @@
 
 
 /*
+ *  unused normal
+*/
+inline glm::vec3 OBJMesh::ShapeNormal(glm::vec3& xyz) {
+    return xyz;
+}
+
+
+/*
  *  get type
 */
 PrimitiveType OBJMesh::GetType() {
@@ -101,4 +109,11 @@ bool OBJMesh::LoadOBJ(std::string filepath) {
 
 
     return true;
+}
+
+/*
+ *  unused
+*/
+void OBJMesh::SetVertexData() {
+    return;
 }
