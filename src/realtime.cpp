@@ -43,6 +43,11 @@ void Realtime::finish() {
         glDeleteVertexArrays(1, &mesh.vao);
     }
 
+    // delete the camera is the scene is initialized
+    if (Realtime::isInitialized) {
+        delete Realtime::sceneCamera;
+    }
+
     this->doneCurrent();
 }
 
@@ -81,6 +86,7 @@ void Realtime::initializeGL() {
 }
 
 void Realtime::paintGL() {
+//    std::cout << "paintgl top" << std::endl;
     // Students: anything requiring OpenGL calls every frame should be done here
 
     if (!Realtime::isInitialized) {
@@ -151,14 +157,24 @@ void Realtime::sceneChanged() {
         glDeleteVertexArrays(1, &mesh.vao);
     }
 
+    // destroy old camera
+
+    delete Realtime::sceneCamera;
+
     // set current params (for on startup)
     Realtime::currentParam1 = settings.shapeParameter1;
     Realtime::currentParam2 = settings.shapeParameter2;
 
+
+    std::cout << "fuck" << std::endl;
+    std::cout << settings.farPlane << std::endl;
+    std::cout << settings.nearPlane << std::endl;
+
+
     // parse the scene that was stored in settings from the call to upload scenefile
     Realtime::sceneParser.parse(settings.sceneFilePath, Realtime::sceneRenderData);
-    Camera cam(Realtime::sceneRenderData.cameraData, size().height(), size().width(), settings.farPlane, settings.nearPlane);
-    Realtime::sceneCamera = &cam;
+    Camera* cam = new Camera(Realtime::sceneRenderData.cameraData, size().height(), size().width(), settings.farPlane, settings.nearPlane);
+    Realtime::sceneCamera = cam;
 
     // build each primitive into a composite struct that contains the class for the trimesh, etc.
     // apply it to the realtime class
@@ -173,13 +189,15 @@ void Realtime::sceneChanged() {
 void Realtime::settingsChanged() {
     std::cout << "sttings changed" << std::endl;
 
-    // if scene camera is null, the scene isn't initialized yet
+    // if the scene isn't initialized yet
     if (!Realtime::isInitialized) {
         return;
     }
 
     // near plane and far plane updates
     if (Realtime::sceneCamera->nearPlane != settings.nearPlane || Realtime::sceneCamera->farPlane != settings.farPlane) {
+
+        std::cout << "camera udpate" << std::endl;
         Realtime::sceneCamera->updateViewPlanes(settings.farPlane, settings.nearPlane);
     }
 
@@ -189,12 +207,17 @@ void Realtime::settingsChanged() {
         Realtime::currentParam1 = settings.shapeParameter1;
         Realtime::currentParam2 = settings.shapeParameter2;
 
+        std::cout << " tesselstaion udpate" << std::endl;
+
         Realtime::UpdateTesselations();
     }
 
+
+    std::cout << "exit" << std::endl;
+
     // TODO: updates for extra credit features
 
-
+    Debug::glErrorCheck();
     update(); // asks for a PaintGL() call to occur
 }
 

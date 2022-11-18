@@ -79,6 +79,7 @@ void Realtime::UpdateTesselations() {
     for (auto& trimesh : Realtime::objectMeshes) {
         trimesh.trimesh->UpdateParams(param1, param2);
     }
+//    Realtime::changedScene = true; // requires a rebuild
 }
 
 /*

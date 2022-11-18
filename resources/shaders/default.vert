@@ -6,8 +6,9 @@ layout(location = 1) in vec3 vertex_norm_obj;
 
 uniform mat4 model_matrix; // CTM for obj -> world
 uniform mat4 inv_trans_model_matrix; // inv transpose CTM for obj norm -> world norm
-uniform mat4 VP_matrix; // MVP matrix for obj -> clip space
-
+//uniform mat4 PV_matrix; // MVP matrix for obj -> clip space
+uniform mat4 view_matrix;
+uniform mat4 proj_matrix;
 
 out vec3 vertex_pos_world; // vertex world position
 out vec3 vertex_norm_world; // vertex norm world position
@@ -23,5 +24,6 @@ void main() {
 
 //    gl_Position = vec4(vertex_pos_obj, 1.0);
     // set position on screen to be the object space position transformed to clip space
-    gl_Position = (VP_matrix * model_matrix) * vec4(vertex_pos_obj, 1.0);
+    gl_Position = (proj_matrix * view_matrix * model_matrix) * vec4(vertex_pos_obj, 1.0);
+//    gl_Position = (model_matrix * view_matrix * proj_matrix) * vec4(vertex_pos_obj, 1.0);
 }

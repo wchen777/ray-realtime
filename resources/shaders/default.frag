@@ -54,6 +54,7 @@ vec3 Phong() {
     illum += Ambient();
 
     vec3 N = normalize(vertex_norm_world);
+    /*
     for (int i = 0; i < MAX_LIGHTS; ++i) {
 
         float Fatt = 1.f;
@@ -87,12 +88,19 @@ vec3 Phong() {
         float RdotV = clamp(dot(R, dirToCamera), 0.0, 1.0);
 
         illum += Fatt * light_colors[i] * (Diffuse(clamp(NdotL, 0.0, 1.0)) + Specular(RdotV));
-    }
+    }*/
 
     return illum;
 }
 
 void main() {
+//    output_color = vec4(abs(vertex_pos_world), 1.0);
+//    output_color = vec4(abs(vertex_norm_world), 1.0);
 //    output_color = vec4(Phong(), 1.f);
-    output_color = vec4(0.5f);
+
+
+//    output_color = vec4(0.f);
+//    vec3 color = Phong();
+//    output_color += vec4(color, 1.f);
+    output_color += vec4(k_a * cAmbient, 1.f);
 }

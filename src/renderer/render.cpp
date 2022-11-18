@@ -99,9 +99,26 @@ void Realtime::InitializeLightUniforms() {
 void Realtime::InitializeCameraUniforms() {
     this->makeCurrent();
 
-    // pass in VP matrix as a uniform (VP is already calculated in camera)
-    GLint VP_mat_loc = glGetUniformLocation(Realtime::shader, "VP_matrix");
-    glUniformMatrix4fv(VP_mat_loc, 1, GL_FALSE, &Realtime::sceneCamera->getViewProjMatrix()[0][0]);
+//     pass in VP matrix as a uniform (VP is already calculated in camera)
+//    std::cout << Realtime::sceneCamera->getViewProjMatrix()[0][0] << std::endl;
+
+//    GLint PV_mat_loc = glGetUniformLocation(Realtime::shader, "PV_matrix");
+//    glUniformMatrix4fv(PV_mat_loc, 1, GL_FALSE, &Realtime::sceneCamera->getProjViewMatrix()[0][0]);
+
+    GLint P_mat_loc = glGetUniformLocation(Realtime::shader, "proj_matrix");
+    glUniformMatrix4fv(P_mat_loc, 1, GL_FALSE, &Realtime::sceneCamera->getProjMatrix()[0][0]);
+
+    GLint PV_mat_loc = glGetUniformLocation(Realtime::shader, "view_matrix");
+    glUniformMatrix4fv(PV_mat_loc, 1, GL_FALSE, &Realtime::sceneCamera->getViewMatrix()[0][0]);
+
+
+//    std::cout << Realtime::sceneCamera->getProjMatrix()[1][2]
+//            << Realtime::sceneCamera->getProjMatrix()[1][3]
+//            << Realtime::sceneCamera->getProjMatrix()[2][2]
+//            << Realtime::sceneCamera->getProjMatrix()[2][3]
+//            << Realtime::sceneCamera->getProjMatrix()[2][0]
+//            << Realtime::sceneCamera->getProjMatrix()[3][0]
+//            << std::endl;
 
     GLint cam_pos_loc = glGetUniformLocation(Realtime::shader, "cam_pos");
     glUniform3fv(cam_pos_loc, 1, &Realtime::sceneCamera->pos[0]);

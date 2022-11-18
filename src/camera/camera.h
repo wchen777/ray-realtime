@@ -46,7 +46,7 @@ public:
     glm::mat4 viewMatrix;
     glm::mat4 projMatrix;
 
-    glm::mat4 viewProjMatrix; // VP matrix
+    glm::mat4 projViewMatrix; // PV matrix
 
 
     void setViewMatrices(); // set the view matrix fields
@@ -58,7 +58,7 @@ public:
     glm::mat4 getViewMatrix() const;
     glm::mat4 getInvViewMatrix() const;
     glm::mat4 getProjMatrix() const;
-    glm::mat4 getViewProjMatrix() const;
+    glm::mat4 getProjViewMatrix() const;
 
     void updateAspectRatio(float aspectRatio);
 
