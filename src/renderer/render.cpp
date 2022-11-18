@@ -89,6 +89,11 @@ void Realtime::InitializeLightUniforms() {
         count++;
     }
 
+    std::cout << "num lights " << count << std::endl;
+
+    // num lights uniform
+    GLint num_lights_loc = glGetUniformLocation(Realtime::shader, "num_lights");
+    glUniform1i(num_lights_loc, count);
 
     this->doneCurrent();
 }
@@ -126,6 +131,21 @@ void Realtime::InitializeCameraUniforms() {
     this->doneCurrent();
 }
 
+
+/*
+ * go through each buffer and destroy them
+*/
+void Realtime::DestroyBuffers() {
+    this->makeCurrent();
+    // destroy old buffers
+    for (MeshPrimitive& mesh : Realtime::objectMeshes) {
+        glDeleteBuffers(1, &mesh.vbo);
+        glDeleteVertexArrays(1, &mesh.vao);
+    }
+    this->doneCurrent();
+}
+
+
 /*
  * go through each mesh object struct and draw them on the screen, initializing the correct uniform variables (per object)
 */
@@ -150,24 +170,26 @@ void Realtime::DrawBuffers() {
 
         // pass in shininess
         GLint shininess_loc = glGetUniformLocation(Realtime::shader, "shininess");
-        glUniform1f(shininess_loc, mesh.material->shininess);
+        glUniform1f(shininess_loc, mesh.material.shininess);
 
         // pass in cAmbient
         GLint cAmbient_loc = glGetUniformLocation(Realtime::shader, "cAmbient");
-        glUniform3fv(cAmbient_loc, 1, &mesh.material->cAmbient[0]);
+        glUniform3fv(cAmbient_loc, 1, &mesh.material.cAmbient[0]);
 
         // pass in cDiffuse
         GLint cDiffuse_loc = glGetUniformLocation(Realtime::shader, "cDiffuse");
-        glUniform3fv(cDiffuse_loc, 1, &mesh.material->cDiffuse[0]);
+        glUniform3fv(cDiffuse_loc, 1, &mesh.material.cDiffuse[0]);
 
         // pass in cSpecular
         GLint cSpecular_loc = glGetUniformLocation(Realtime::shader, "cSpecular");
-        glUniform3fv(cSpecular_loc, 1, &mesh.material->cSpecular[0]);
+        glUniform3fv(cSpecular_loc, 1, &mesh.material.cSpecular[0]);
 
         // draw command for this object
         glDrawArrays(GL_TRIANGLES, 0, mesh.trimesh->m_vertexData.size() / 6);
         // Unbind Vertex Array
         glBindVertexArray(0);
+
+//        std::cout << "draw size: " << mesh.trimesh->m_vertexData.size() << std::endl;
 
     }
 

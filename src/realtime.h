@@ -47,6 +47,7 @@ public:
     void InitializeLightUniforms();
     void InitializeCameraUniforms();
     void DrawBuffers();
+    void DestroyBuffers();
 
     bool isInitialized = false;
     bool changedScene = false;

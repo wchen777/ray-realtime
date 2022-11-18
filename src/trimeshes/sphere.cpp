@@ -42,6 +42,7 @@ void Sphere::MakeSphere() {
  * createa single wedge of the sphere
 */
 void Sphere::MakeWedge(float currentTheta, float nextTheta) {
+    m_param1 = std::max(2, m_param1);
     float phiStep = glm::radians(180.f / m_param1);
 
     for (int p = 0; p < m_param1; ++p) {
@@ -59,21 +60,21 @@ void Sphere::MakeWedge(float currentTheta, float nextTheta) {
         auto sinNextTheta = glm::sin(nextTheta);
         auto cosNextTheta = glm::cos(nextTheta);
 
-        auto tlX = sinStartPhi * sinCurrentTheta;
-        auto tlY = cosStartPhi;
-        auto tlZ = sinStartPhi * cosCurrentTheta;
+        auto tlX = m_radius * sinStartPhi * sinCurrentTheta;
+        auto tlY = m_radius * cosStartPhi;
+        auto tlZ = m_radius * sinStartPhi * cosCurrentTheta;
 
-        auto trX = sinStartPhi * sinNextTheta;
-        auto trY = cosStartPhi;
-        auto trZ = sinStartPhi * cosNextTheta;
+        auto trX = m_radius * sinStartPhi * sinNextTheta;
+        auto trY = m_radius * cosStartPhi;
+        auto trZ = m_radius * sinStartPhi * cosNextTheta;
 
-        auto blX = sinEndPhi * sinCurrentTheta;
-        auto blY = cosEndPhi;
-        auto blZ = sinEndPhi * cosCurrentTheta;
+        auto blX = m_radius * sinEndPhi * sinCurrentTheta;
+        auto blY = m_radius * cosEndPhi;
+        auto blZ = m_radius * sinEndPhi * cosCurrentTheta;
 
-        auto brX = sinEndPhi * sinNextTheta;
-        auto brY = cosEndPhi;
-        auto brZ = sinEndPhi * cosNextTheta;
+        auto brX = m_radius * sinEndPhi * sinNextTheta;
+        auto brY = m_radius * cosEndPhi;
+        auto brZ = m_radius * sinEndPhi * cosNextTheta;
 
         // this uses the sphere's custom normal
         Sphere::MakeSideTile(glm::vec3(tlX, tlY, tlZ), glm::vec3(trX, trY, trZ), glm::vec3(blX, blY, blZ), glm::vec3(brX, brY, brZ));

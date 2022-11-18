@@ -2,8 +2,8 @@
 #include <ostream>
 #include <stdexcept>
 #include "camera.h"
-#include "glm/ext/matrix_clip_space.hpp"
-#include "glm/ext/matrix_transform.hpp"
+//#include "glm/ext/matrix_clip_space.hpp"
+//#include "glm/ext/matrix_transform.hpp"
 #include "transforms.h"
 
 void Camera::setViewMatrices() {
@@ -29,10 +29,10 @@ void Camera::setViewMatrices() {
     Camera::invViewMatrix = glm::inverse(viewM);
 
 
-    std::cout << Camera::farPlane << std::endl;
-    std::cout << Camera::nearPlane << std::endl;
+//    std::cout << Camera::farPlane << std::endl;
+//    std::cout << Camera::nearPlane << std::endl;
 
-    std::cout << "set view matrices" << std::endl;
+//    std::cout << "set view matrices" << std::endl;
 
 //    std::cout << farPlaneNew << std::endl;
 //    std::cout << nearPlaneNew << std::endl;
@@ -71,21 +71,21 @@ void Camera::setViewMatrices() {
                         0.f, 0.f, -2.f, 0.f,
                         0.f, 0.f, -1.f, 1.f);
 
-//    Camera::projMatrix = zRemapMatrix * unhingingMatrix * scaleMatrix;
-    Camera::projMatrix = glm::perspective(glm::degrees(Camera::camData.heightAngle), aspectRatio, Camera::nearPlane, Camera::farPlane);
-    Camera::viewMatrix = glm::lookAt(Camera::pos, Camera::look, Camera::up);
+    Camera::projMatrix = zRemapMatrix * unhingingMatrix * scaleMatrix;
+//    Camera::projMatrix = glm::perspective(glm::degrees(Camera::camData.heightAngle), aspectRatio, Camera::nearPlane, Camera::farPlane);
+//    Camera::viewMatrix = glm::lookAt(Camera::pos, Camera::look, Camera::up);
     Camera::projViewMatrix =  Camera::projMatrix * Camera::viewMatrix; // MVP = P * V * M
 }
 
 void Camera::updateViewPlanes(float farPlaneNew, float nearPlaneNew) {
 
-//    std::cout << Camera::farPlane << std::endl;
-//    std::cout << Camera::nearPlane << std::endl;
+    std::cout << Camera::farPlane << std::endl;
+    std::cout << Camera::nearPlane << std::endl;
 
-//    std::cout << "passed" << std::endl;
+    std::cout << "passed" << std::endl;
 
-//    std::cout << farPlaneNew << std::endl;
-//    std::cout << nearPlaneNew << std::endl;
+    std::cout << farPlaneNew << std::endl;
+    std::cout << nearPlaneNew << std::endl;
 
     Camera::farPlane = farPlaneNew;
     Camera::nearPlane = nearPlaneNew;

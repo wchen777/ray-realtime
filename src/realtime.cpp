@@ -38,10 +38,7 @@ void Realtime::finish() {
     Realtime::DestroyMeshes();
 
     // destroy all buffers
-    for (MeshPrimitive& mesh : Realtime::objectMeshes) {
-        glDeleteBuffers(1, &mesh.vbo);
-        glDeleteVertexArrays(1, &mesh.vao);
-    }
+    Realtime::DestroyBuffers();
 
     // delete the camera is the scene is initialized
     if (Realtime::isInitialized) {
@@ -140,6 +137,9 @@ void Realtime::resizeGL(int w, int h) {
         Realtime::sceneCamera->updateAspectRatio(aspectRatio);
     }
 
+    // destroy old buffers
+    Realtime::DestroyBuffers();
+    // reinitialize them
     Realtime::InitializeBuffers();
 
 }
@@ -166,9 +166,9 @@ void Realtime::sceneChanged() {
     Realtime::currentParam2 = settings.shapeParameter2;
 
 
-    std::cout << "fuck" << std::endl;
-    std::cout << settings.farPlane << std::endl;
-    std::cout << settings.nearPlane << std::endl;
+//    std::cout << "fuck" << std::endl;
+//    std::cout << settings.farPlane << std::endl;
+//    std::cout << settings.nearPlane << std::endl;
 
 
     // parse the scene that was stored in settings from the call to upload scenefile
@@ -187,7 +187,7 @@ void Realtime::sceneChanged() {
 }
 
 void Realtime::settingsChanged() {
-    std::cout << "sttings changed" << std::endl;
+//    std::cout << "sttings changed" << std::endl;
 
     // if the scene isn't initialized yet
     if (!Realtime::isInitialized) {
@@ -197,7 +197,7 @@ void Realtime::settingsChanged() {
     // near plane and far plane updates
     if (Realtime::sceneCamera->nearPlane != settings.nearPlane || Realtime::sceneCamera->farPlane != settings.farPlane) {
 
-        std::cout << "camera udpate" << std::endl;
+//        std::cout << "camera udpate" << std::endl;
         Realtime::sceneCamera->updateViewPlanes(settings.farPlane, settings.nearPlane);
     }
 
@@ -207,17 +207,22 @@ void Realtime::settingsChanged() {
         Realtime::currentParam1 = settings.shapeParameter1;
         Realtime::currentParam2 = settings.shapeParameter2;
 
-        std::cout << " tesselstaion udpate" << std::endl;
+//        std::cout << " tesselstaion udpate" << std::endl;
 
+        // update tesselation parameters
         Realtime::UpdateTesselations();
+        // destroy old buffers
+        Realtime::DestroyBuffers();
+        // destroy the old ones
+        Realtime::InitializeBuffers();
     }
 
 
-    std::cout << "exit" << std::endl;
+//    std::cout << "exit" << std::endl;
 
     // TODO: updates for extra credit features
 
-    Debug::glErrorCheck();
+//    Debug::glErrorCheck();
     update(); // asks for a PaintGL() call to occur
 }
 

@@ -1,5 +1,7 @@
 #pragma once
 #include "utils/scenedata.h"
+#include <iostream>
+#include <ostream>
 #include <vector>
 #include <glm/glm.hpp>
 
@@ -32,6 +34,7 @@ class TrimeshData {
             m_param2 = std::max(p2, 3); // can't have theta splits less than 3, or we'll get a flat surface
             m_vertexData = std::vector<float>();
             SetVertexData();
+            std::cout << "size after update: " << m_vertexData.size() << std::endl;
         }
 
          // function for the shape's "side tile", using the shape-specific normal function

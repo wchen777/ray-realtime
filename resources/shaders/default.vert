@@ -25,5 +25,4 @@ void main() {
 //    gl_Position = vec4(vertex_pos_obj, 1.0);
     // set position on screen to be the object space position transformed to clip space
     gl_Position = (proj_matrix * view_matrix * model_matrix) * vec4(vertex_pos_obj, 1.0);
-//    gl_Position = (model_matrix * view_matrix * proj_matrix) * vec4(vertex_pos_obj, 1.0);
 }

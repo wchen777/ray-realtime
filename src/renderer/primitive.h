@@ -12,7 +12,7 @@ struct MeshPrimitive {
 
     // primitive data
     PrimitiveType type;
-    SceneMaterial* material;
+    SceneMaterial material;
 
     // for world space conversions
     glm::mat4 modelMatrix;

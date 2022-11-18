@@ -59,7 +59,7 @@ void Realtime::CompilePrimitiveMeshes() {
         prim.type = obj.primitive.type;
         prim.invTransposeModelMatrix = glm::inverse(glm::transpose(obj.ctm));
         prim.modelMatrix = obj.ctm;
-        prim.material = &obj.primitive.material;
+        prim.material = obj.primitive.material;
 
         std::cout << prim.trimesh->m_vertexData.size() << std::endl;
 
