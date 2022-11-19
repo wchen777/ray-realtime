@@ -47,10 +47,13 @@ public:
     void InitializeLightUniforms();
     void InitializeCameraUniforms();
     void DrawBuffers();
-    void DestroyBuffers();
+    void DestroyBuffers(bool isExit);
 
     bool isInitialized = false;
     bool changedScene = false;
+
+    // extra credit
+    float GetParamMultiple(glm::mat4 ctm);
 
 
 public slots:

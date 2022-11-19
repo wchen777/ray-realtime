@@ -21,5 +21,8 @@ struct MeshPrimitive {
     // for openGL bindings
     GLuint vbo;
     GLuint vao;
+
+    // extra credit
+    float adaptiveMultiple;
 };
 

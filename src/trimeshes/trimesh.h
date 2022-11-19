@@ -19,7 +19,7 @@ class TrimeshData {
         std::vector<float> m_vertexData; // the trimesh's vertex data
         int m_param1; // vertical tesselation
         int m_param2; // circular tesselation
-
+        std::string filepath; // for meshes
 
         // static helper function to insert a vec3 into the vertex data
         static inline void insertVec3(std::vector<float> &data, glm::vec3 v) {
@@ -89,6 +89,16 @@ class TrimeshData {
           insertVec3(m_vertexData, brNorm);
         }
 
+        // for efficient VBOs
+        std::string GetKey() {
+            if (GetType() == PrimitiveType::PRIMITIVE_MESH) {
+                return filepath;
+            } else {
+                return std::to_string(m_param1) + "-" +
+                        std::to_string(m_param2) + "-" +
+                        std::to_string(static_cast<std::underlying_type_t<PrimitiveType>>(GetType()));
+            }
+        }
 
         // VIRTUAL FUNCTIONS to be inherited by derived classes
 
@@ -98,6 +108,8 @@ class TrimeshData {
 
         virtual inline glm::vec3 ShapeNormal(glm::vec3& xyz) = 0; // the trimesh's custom normal function, if applicable
 
-        virtual PrimitiveType GetType() = 0;
+        virtual PrimitiveType GetType() = 0; // get mesh type of trimesh
+
+
 
 };

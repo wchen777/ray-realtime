@@ -17,6 +17,7 @@ PrimitiveType OBJMesh::GetType() {
 }
 
 bool OBJMesh::LoadOBJ(std::string filepath) {
+    OBJMesh::filepath = filepath; // set filepath
     std::vector<unsigned int> vertexIndices, uvIndices, normalIndices;
 
     // temporary vectors for data read in
@@ -79,7 +80,8 @@ bool OBJMesh::LoadOBJ(std::string filepath) {
                 if (matches != 4) {
                     std::cout << "Could not parse line with face data, matches: " << matches << std::endl;
                     std::cout << "Line #" << line << std::endl;
-                    return false;
+                    line++;
+                    continue;
                 }
 
             }

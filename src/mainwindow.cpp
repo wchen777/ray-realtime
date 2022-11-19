@@ -142,7 +142,7 @@ void MainWindow::initialize() {
 
     // Extra Credit:
     ec1 = new QCheckBox();
-    ec1->setText(QStringLiteral("Extra Credit 1"));
+    ec1->setText(QStringLiteral("Adaptive level of detail"));
     ec1->setChecked(false);
 
     ec2 = new QCheckBox();

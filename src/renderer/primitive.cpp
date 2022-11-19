@@ -8,6 +8,8 @@
 #include "../trimeshes/cylinder.h"
 #include "../trimeshes/obj_mesh.h"
 
+#define DISTANCE_SCALE 10.f
+
 /*
  * turn the parsed shapes into scene primitive mesh structs.
  * assumes scene has been parsed,
@@ -51,9 +53,12 @@ void Realtime::CompilePrimitiveMeshes() {
             break;
         }
 
+        float adaptiveLevelOfDetailMult = Realtime::GetParamMultiple(obj.ctm);
+
         if (obj.primitive.type != PrimitiveType::PRIMITIVE_MESH) {
             // this builds the trimesh.
-            trimesh->UpdateParams(settings.shapeParameter1, settings.shapeParameter2);
+            trimesh->UpdateParams(static_cast<int>(adaptiveLevelOfDetailMult * settings.shapeParameter1),
+                                  static_cast<int>(adaptiveLevelOfDetailMult * settings.shapeParameter2));
         }
 
         // set all remaining fields
@@ -62,6 +67,7 @@ void Realtime::CompilePrimitiveMeshes() {
         prim.invTransposeModelMatrix = glm::inverse(glm::transpose(obj.ctm));
         prim.modelMatrix = obj.ctm;
         prim.material = obj.primitive.material;
+        prim.adaptiveMultiple = adaptiveLevelOfDetailMult;
 
         std::cout << prim.trimesh->m_vertexData.size() << std::endl;
 
@@ -79,7 +85,12 @@ void Realtime::UpdateTesselations() {
     auto param2 = settings.shapeParameter2;
 
     for (auto& trimesh : Realtime::objectMeshes) {
-        trimesh.trimesh->UpdateParams(param1, param2);
+        // only meshes need to be updated
+
+        if (trimesh.type != PrimitiveType::PRIMITIVE_MESH) {
+            trimesh.trimesh->UpdateParams(static_cast<int>(trimesh.adaptiveMultiple * param1),
+                                          static_cast<int>(trimesh.adaptiveMultiple * param2));
+        }
     }
 //    Realtime::changedScene = true; // requires a rebuild
 }
@@ -91,6 +102,26 @@ void Realtime::DestroyMeshes() {
     for (auto& trimesh : Realtime::objectMeshes) {
         delete trimesh.trimesh;
     }
+}
+
+
+/*
+ * EXTRA CREDIT: distance-based tesselation parameters
+*/
+float Realtime::GetParamMultiple(glm::mat4 ctm) {
+
+    if (!settings.extraCredit1) {
+        return 1.f;
+    }
+
+    glm::vec3 worldCoord = glm::vec3(ctm * glm::vec4(0.f, 0.f, 0.f, 1.f));
+    glm::vec3 cameraCoord = Realtime::sceneCamera->pos;
+
+    float distance = glm::distance(cameraCoord, worldCoord);
+
+    // if the distance is closer than distance scale -> tesselation parameters scaled up
+    // if the distance is farther than distance scale -> tesselation parameters scaled down
+    return DISTANCE_SCALE / distance;
 }
 
 

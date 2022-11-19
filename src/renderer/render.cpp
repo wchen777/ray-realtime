@@ -1,6 +1,7 @@
 #include "realtime.h"
 #include <iostream>
 #include <ostream>
+#include <map>
 
 #define MAX_LIGHTS 8
 
@@ -10,10 +11,24 @@
 void Realtime::InitializeBuffers() {
     this->makeCurrent();
 
+    // map from string key to VBO
+    std::unordered_map<std::string, GLuint> keyToVBO;
+
     // generate VBO and VAO for every mesh
     for (MeshPrimitive& mesh : Realtime::objectMeshes) {
-        // first, generate a VBO
-        glGenBuffers(1, &mesh.vbo);
+
+        auto key = mesh.trimesh->GetKey(); // unique key for a trimesh with parameter and type
+
+        // check to see the map if a tesselation of the same parameters and type exists.
+        if (keyToVBO.find(key) != keyToVBO.end()) {
+            // if it exists in the map, our mesh vbo is the one in the map
+            mesh.vbo = keyToVBO[key];
+        } else {
+            // if not, generate a new VBO
+            glGenBuffers(1, &mesh.vbo);
+        }
+
+        // mesh.vbo is now populated with the correct mesh
 
         // bind that VBO to the state machine
         glBindBuffer(GL_ARRAY_BUFFER, mesh.vbo);
@@ -116,15 +131,6 @@ void Realtime::InitializeCameraUniforms() {
     GLint PV_mat_loc = glGetUniformLocation(Realtime::shader, "view_matrix");
     glUniformMatrix4fv(PV_mat_loc, 1, GL_FALSE, &Realtime::sceneCamera->getViewMatrix()[0][0]);
 
-
-//    std::cout << Realtime::sceneCamera->getProjMatrix()[1][2]
-//            << Realtime::sceneCamera->getProjMatrix()[1][3]
-//            << Realtime::sceneCamera->getProjMatrix()[2][2]
-//            << Realtime::sceneCamera->getProjMatrix()[2][3]
-//            << Realtime::sceneCamera->getProjMatrix()[2][0]
-//            << Realtime::sceneCamera->getProjMatrix()[3][0]
-//            << std::endl;
-
     GLint cam_pos_loc = glGetUniformLocation(Realtime::shader, "cam_pos");
     glUniform3fv(cam_pos_loc, 1, &Realtime::sceneCamera->pos[0]);
 
@@ -133,14 +139,16 @@ void Realtime::InitializeCameraUniforms() {
 
 
 /*
- * go through each buffer and destroy them
+ * go through each buffer and destroy them. clean up meshes only if we are exiting the scene
 */
-void Realtime::DestroyBuffers() {
+void Realtime::DestroyBuffers(bool isExit) {
     this->makeCurrent();
     // destroy old buffers
     for (MeshPrimitive& mesh : Realtime::objectMeshes) {
-        glDeleteBuffers(1, &mesh.vbo);
-        glDeleteVertexArrays(1, &mesh.vao);
+        if (isExit || mesh.type != PrimitiveType::PRIMITIVE_MESH) {
+            glDeleteBuffers(1, &mesh.vbo);
+            glDeleteVertexArrays(1, &mesh.vao);
+        }
     }
     this->doneCurrent();
 }

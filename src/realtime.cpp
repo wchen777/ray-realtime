@@ -38,7 +38,7 @@ void Realtime::finish() {
     Realtime::DestroyMeshes();
 
     // destroy all buffers
-    Realtime::DestroyBuffers();
+    Realtime::DestroyBuffers(true);
 
     // delete the camera is the scene is initialized
     if (Realtime::isInitialized) {
@@ -151,15 +151,13 @@ void Realtime::sceneChanged() {
     // destroy old meshes
     Realtime::DestroyMeshes();
 
-    // destroy old buffers
-    for (MeshPrimitive& mesh : Realtime::objectMeshes) {
-        glDeleteBuffers(1, &mesh.vbo);
-        glDeleteVertexArrays(1, &mesh.vao);
+    // destroy old meshes
+    Realtime::DestroyBuffers(true);
+
+    // delete the camera is the scene is initialized
+    if (Realtime::isInitialized) {
+        delete Realtime::sceneCamera;
     }
-
-    // destroy old camera
-
-    delete Realtime::sceneCamera;
 
     // set current params (for on startup)
     Realtime::currentParam1 = settings.shapeParameter1;
@@ -212,7 +210,7 @@ void Realtime::settingsChanged() {
         // update tesselation parameters
         Realtime::UpdateTesselations();
         // destroy old buffers
-        Realtime::DestroyBuffers();
+        Realtime::DestroyBuffers(false);
         // destroy the old ones
         Realtime::InitializeBuffers();
     }
