@@ -46,51 +46,51 @@ vec3 Specular(float RdotV) {
     }
 }
 
-vec3 Phong() {
+//vec3 Phong() {
 
-    vec3 illum = vec3(0.0);
+//    vec3 illum = vec3(0.0);
 
-    illum += Ambient();
+//    illum += Ambient();
 
-    vec3 N = normalize(vertex_norm_world);
+//    vec3 N = normalize(vertex_norm_world);
 
-    for (int i = 0; i < num_lights; ++i) {
+//    for (int i = 0; i < num_lights; ++i) {
 
-        float Fatt = 1.f;
+//        float Fatt = 1.f;
 
-        // direciton to light differs between light types
-        vec3 L = vec3(0.f);
+//        // direciton to light differs between light types
+//        vec3 L = vec3(0.f);
 
-        if (light_types[i] == 1) {
-            L = normalize(-1 * light_dirs[i]);
-        } else {
-            continue;
-        }
-
-        // for diffuse
-//        switch(light_types[i]) {
-////        case 0:
-////             L = normalize(light_positions[i] - vertex_pos_world);
-////            break;
-//        case 1: // direction
+//        if (light_types[i] == 1) {
 //            L = normalize(-1 * light_dirs[i]);
-//            break;
-//        default:
-//            continue; // ignore other light types for now
+//        } else {
+//            continue;
 //        }
 
-        float NdotL = dot(N, L);
+//        // for diffuse
+////        switch(light_types[i]) {
+//////        case 0:
+//////             L = normalize(light_positions[i] - vertex_pos_world);
+//////            break;
+////        case 1: // direction
+////            L = normalize(-1 * light_dirs[i]);
+////            break;
+////        default:
+////            continue; // ignore other light types for now
+////        }
 
-        // for specular
-        vec3 R = reflect(L, N);
-        vec3 dirToCamera = normalize(vertex_pos_world - cam_pos);
-        float RdotV = clamp(dot(R, dirToCamera), 0.0, 1.0);
+//        float NdotL = dot(N, L);
 
-        illum += Fatt * light_colors[i] * (Diffuse(clamp(NdotL, 0.0, 1.0)) + Specular(RdotV));
-    }
+//        // for specular
+//        vec3 R = reflect(L, N);
+//        vec3 dirToCamera = normalize(vertex_pos_world - cam_pos);
+//        float RdotV = clamp(dot(R, dirToCamera), 0.0, 1.0);
 
-    return illum;
-}
+//        illum += Fatt * light_colors[i] * (Diffuse(clamp(NdotL, 0.0, 1.0)) + Specular(RdotV));
+//    }
+
+//    return illum;
+//}
 
 void main() {
 

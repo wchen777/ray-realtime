@@ -137,10 +137,10 @@ void Realtime::resizeGL(int w, int h) {
         Realtime::sceneCamera->updateAspectRatio(aspectRatio);
     }
 
-    // destroy old buffers
-    Realtime::DestroyBuffers();
-    // reinitialize them
-    Realtime::InitializeBuffers();
+//    // destroy old buffers
+//    Realtime::DestroyBuffers();
+//    // reinitialize them
+//    Realtime::InitializeBuffers();
 
 }
 
