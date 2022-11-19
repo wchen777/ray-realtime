@@ -40,8 +40,8 @@ void Realtime::InitializeBuffers() {
         glGenVertexArrays(1, &mesh.vao);
         glBindVertexArray(mesh.vao);
 
-        std::cout << mesh.vao << " vao" << std::endl;
-        std::cout << mesh.trimesh->m_vertexData.size() << std::endl;
+//        std::cout << mesh.vao << " vao" << std::endl;
+//        std::cout << mesh.trimesh->m_vertexData.size() << std::endl;
 
 
         // Enable and define attribute 0 to store vertex positions (vec3)
@@ -145,6 +145,8 @@ void Realtime::DestroyBuffers(bool isExit) {
     this->makeCurrent();
     // destroy old buffers
     for (MeshPrimitive& mesh : Realtime::objectMeshes) {
+        // if we are exiting, always clean up
+        // otherwise, only cleanup the non-obj mesh primitives
         if (isExit || mesh.type != PrimitiveType::PRIMITIVE_MESH) {
             glDeleteBuffers(1, &mesh.vbo);
             glDeleteVertexArrays(1, &mesh.vao);

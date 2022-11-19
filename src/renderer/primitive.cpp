@@ -24,7 +24,7 @@ void Realtime::CompilePrimitiveMeshes() {
     // go through each object and create a trimesh for them
     for (auto& obj : objs) {
 
-        std::cout << "a shape" << std::endl;
+//        std::cout << "a shape" << std::endl;
 
         MeshPrimitive prim = MeshPrimitive{}; // the primitive
 
