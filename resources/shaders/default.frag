@@ -13,9 +13,8 @@ uniform vec3 light_positions[8]; // light positions
 uniform vec3 light_colors[8]; // light intensities
 
 uniform vec3 light_functions[8]; // light attenuation
-uniform vec3 light_angles[8]; // light angles
+uniform float light_angles[8]; // light angles
 uniform float light_penumbras[8]; // only for spot
-uniform float d; // for attenuation
 
 // for ambient lighting
 uniform float k_a;
@@ -75,11 +74,15 @@ void Phong(){
         // direciton to light differs between light types
         vec3 L = vec3(0.f);
 
+        float d = length(vertex_pos_world - light_positions[i]);
+
         if (light_types[i] == 1) { // ---------- directional
             L = normalize(-1 * light_dirs[i]);
         }
         else if (light_types[i] == 0) { // --------- point
             L = normalize(light_positions[i] - vertex_pos_world);
+
+             Fatt = min(1.f / (light_functions[i][0] + (d * light_functions[i][1]) + (d * d * light_functions[i][2])), 1.f);
         }
         else if (light_types[i] == 2) { // ---------- spot
             L = normalize(light_positions[i] - vertex_pos_world);

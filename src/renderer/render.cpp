@@ -99,6 +99,18 @@ void Realtime::InitializeLightUniforms() {
         GLint light_colors_loc = glGetUniformLocation(Realtime::shader, ("light_colors[" + std::to_string(count) + "]").c_str());
         glUniform3fv(light_colors_loc, 1, &light.color[0]);
 
+        // light attenuation functions uniform
+        GLint light_functions_loc = glGetUniformLocation(Realtime::shader, ("light_functions[" + std::to_string(count) + "]").c_str());
+        glUniform3fv(light_functions_loc, 1, &light.function[0]);
+
+        // light angle uniform
+        GLint light_angles_loc = glGetUniformLocation(Realtime::shader, ("light_angles[" + std::to_string(count) + "]").c_str());
+        glUniform1f(light_angles_loc, light.angle);
+
+        // light penumbra uniform
+        GLint light_penumbras_loc = glGetUniformLocation(Realtime::shader, ("light_penumbras[" + std::to_string(count) + "]").c_str());
+        glUniform1f(light_penumbras_loc, light.penumbra);
+
         // light type uniform
         GLint light_type_loc = glGetUniformLocation(Realtime::shader, ("light_types[" + std::to_string(count) + "]").c_str());
         glUniform1i(light_type_loc, static_cast<std::underlying_type_t<LightType>>(light.type));
