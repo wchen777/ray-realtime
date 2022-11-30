@@ -11,7 +11,11 @@ uniform int light_types[8]; // light types -> point=0, directional=1, spot=2
 uniform vec3 light_dirs[8]; // light directions
 uniform vec3 light_positions[8]; // light positions
 uniform vec3 light_colors[8]; // light intensities
-//uniform float light_penumbras[8]; // only for spot
+
+uniform vec3 light_functions[8]; // light attenuation
+uniform vec3 light_angles[8]; // light angles
+uniform float light_penumbras[8]; // only for spot
+uniform float d; // for attenuation
 
 // for ambient lighting
 uniform float k_a;
@@ -26,6 +30,12 @@ uniform float shininess;
 uniform float k_s;
 uniform vec3 cam_pos;
 uniform vec3 cSpecular;
+
+// falloff for spot lights
+float falloffFactor(float angle, float innerA, float outerA) {
+    float t = (angle - innerA) / (outerA - innerA);
+    return -2 * pow(t, 3) + 3 * pow(t, 2);
+}
 
 // ambient
 vec3 Ambient() {
@@ -48,7 +58,6 @@ vec3 Specular(float RdotV) {
 
 void Phong(){
 
-
     // AMBIENT
     output_color[0] += k_a * cAmbient[0];
     output_color[1] += k_a * cAmbient[1];
@@ -61,17 +70,32 @@ void Phong(){
         vec3 illumAcc = vec3(0.f, 0.f, 0.f);
 
         float Fatt = 1.f;
+        float falloff = 1.f;
 
         // direciton to light differs between light types
         vec3 L = vec3(0.f);
 
-        if (light_types[i] == 1) { // directional
+        if (light_types[i] == 1) { // ---------- directional
             L = normalize(-1 * light_dirs[i]);
         }
-        else if (light_types[i] == 0) { // point
+        else if (light_types[i] == 0) { // --------- point
             L = normalize(light_positions[i] - vertex_pos_world);
         }
-        else {
+        else if (light_types[i] == 2) { // ---------- spot
+            L = normalize(light_positions[i] - vertex_pos_world);
+
+            float x = acos(dot(L, normalize(-1.f * light_dirs[i]))); // normalize this every time????
+            float inner = light_angles[i] - light_penumbras[i]; // inner angle is the total angle - the penumbra
+
+            // falloff factor
+            falloff = x <= inner ? 1.f
+                                 : (x > light_angles[i])
+                                      ? 0.f
+                                      : (1.f - falloffFactor(x, inner, light_angles[i]));
+
+            Fatt = min(1.f / (light_functions[i][0] + (d * light_functions[i][1]) + (d * d * light_functions[i][2])), 1.f);
+        }
+        else { // unsupported light type
             continue;
         }
 
@@ -88,7 +112,9 @@ void Phong(){
 
         illumAcc += Specular(RdotV);
 
-        illumAcc *= Fatt * light_colors[i];
+        // add total lighting
+
+        illumAcc *= Fatt * falloff * light_colors[i];
 
         output_color[0] += illumAcc[0];
         output_color[1] += illumAcc[1];
