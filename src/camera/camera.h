@@ -2,6 +2,7 @@
 
 #include <glm/glm.hpp>
 #include "../utils/scenedata.h"
+#include "transforms.h"
 
 
 // A class representing a virtual camera.
@@ -48,7 +49,6 @@ public:
 
     glm::mat4 projViewMatrix; // PV matrix
 
-
     void setViewMatrices(); // set the view matrix fields
 
     void updateViewPlanes(float farPlaneNew, float nearPlaneNew); // when the far and new planes are updated
@@ -60,6 +60,30 @@ public:
     glm::mat4 getProjMatrix() const;
     glm::mat4 getProjViewMatrix() const;
 
+    glm::mat4 currentTranslation = glm::mat4(1.f); // current translation for rebuilding
+
+    void updateViewMatricesTranslate(glm::mat4& translate); // helper for camera transformation
+
+    // W: Translates the camera in the direction of the look vector
+    void WPressed(float speed);
+
+    // S: Translates the camera in the opposite direction of the look vector
+    void SPressed(float speed);
+
+    // A: Translates the camera in the left direction, perpendicular to the look and up vectors
+    void APressed(float speed);
+
+    // D: Translates the camera in the right direction, also perpendicular to the look and up vectors.
+    // This movement should be opposite to that of pressing A
+    void DPressed(float speed);
+
+    // Space: Translates the camera along the world space vector (0,1,0)
+    void SpacePressed(float speed);
+
+    // Ctrl: Translates the camera along the world space vector (0,-1,0)
+    void CtrlPressed(float speed);
+
+    // update aspect ratio for resize
     void updateAspectRatio(float aspectRatio);
 
     // Returns the aspect ratio of the camera.

@@ -8,6 +8,7 @@
 #include "settings.h"
 #include "utils/shaderloader.h"
 
+#define UNITS_PER_SECOND 2.f
 
 // ================== Project 5: Lights, Camera
 
@@ -26,6 +27,8 @@ Realtime::Realtime(QWidget *parent)
     m_keyMap[Qt::Key_Space]   = false;
 
     // If you must use this function, do not edit anything above this
+
+    m_keyMap[Qt::Key_Meta]   = false;
 }
 
 void Realtime::finish() {
@@ -320,6 +323,46 @@ void Realtime::timerEvent(QTimerEvent *event) {
     m_elapsedTimer.restart();
 
     // Use deltaTime and m_keyMap here to move around
+
+    // no camera -> return
+    if (Realtime::sceneCamera == nullptr) {
+        return;
+    }
+
+    // delta time returns time in seconds elapsed
+
+    float speed = deltaTime * UNITS_PER_SECOND;
+
+    // W key pressed
+    if (Realtime::m_keyMap[Qt::Key_W]) {
+        Realtime::sceneCamera->WPressed(speed);
+    }
+
+    // A key pressed
+    if (Realtime::m_keyMap[Qt::Key_A]) {
+        Realtime::sceneCamera->APressed(speed);
+    }
+
+    // D key pressed
+    if (Realtime::m_keyMap[Qt::Key_D]) {
+        Realtime::sceneCamera->DPressed(speed);
+    }
+
+    // S key pressed
+    if (Realtime::m_keyMap[Qt::Key_S]) {
+        Realtime::sceneCamera->SPressed(speed);
+    }
+
+    // Space key pressed
+    if (Realtime::m_keyMap[Qt::Key_Space]) {
+        Realtime::sceneCamera->SpacePressed(speed);
+    }
+
+    // Ctrl key pressed
+    if (Realtime::m_keyMap[Qt::Key_Control] || Realtime::m_keyMap[Qt::Key_Meta]) {
+        Realtime::sceneCamera->CtrlPressed(speed);
+    }
+
 
     update(); // asks for a PaintGL() call to occur
 }
