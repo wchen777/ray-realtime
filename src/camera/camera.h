@@ -62,7 +62,10 @@ public:
 
     glm::mat4 currentTranslation = glm::mat4(1.f); // current translation for rebuilding
 
+    glm::mat4 currentRotation = glm::mat4(1.f); // current rotation for rebuilding
+
     void updateViewMatricesTranslate(glm::mat4& translate); // helper for camera transformation
+    void updateViewMatricesRotation(glm::mat4& rotation); // helper for camera rotation
 
     // W: Translates the camera in the direction of the look vector
     void WPressed(float speed);
@@ -82,6 +85,9 @@ public:
 
     // Ctrl: Translates the camera along the world space vector (0,-1,0)
     void CtrlPressed(float speed);
+
+    void RotateX(float deltaX); // rotate about world space vector 0,1,0
+    void RotateY(float deltaY); // Rotates the camera about the axis defined by a vector perpendicular to the look and up vectors
 
     // update aspect ratio for resize
     void updateAspectRatio(float aspectRatio);

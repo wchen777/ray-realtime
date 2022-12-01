@@ -8,7 +8,7 @@
 #include "settings.h"
 #include "utils/shaderloader.h"
 
-#define UNITS_PER_SECOND 2.f
+#define UNITS_PER_SECOND 5.f
 
 // ================== Project 5: Lights, Camera
 
@@ -312,6 +312,13 @@ void Realtime::mouseMoveEvent(QMouseEvent *event) {
         m_prev_mouse_pos = glm::vec2(posX, posY);
 
         // Use deltaX and deltaY here to rotate
+
+        if (Realtime::sceneCamera == nullptr) {
+            return;
+        }
+
+        Realtime::sceneCamera->RotateX(deltaX);
+        Realtime::sceneCamera->RotateY(deltaY);
 
         update(); // asks for a PaintGL() call to occur
     }

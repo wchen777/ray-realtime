@@ -5,6 +5,8 @@
 //#include "glm/ext/matrix_clip_space.hpp"
 //#include "glm/ext/matrix_transform.hpp"
 
+#define ROTATION_SCALE 0.5f
+
 void Camera::setViewMatrices() {
 
     auto w = glm::normalize(-1.f * look);
@@ -15,7 +17,7 @@ void Camera::setViewMatrices() {
     auto u = glm::cross(v, w);
 
     auto Mtranslate = getTranslationMatrix(-1 * Camera::pos[0], -1 * Camera::pos[1], -1 * Camera::pos[2]) * Camera::currentTranslation;
-    auto Mrotate = glm::mat4(
+    auto Mrotate = Camera::currentRotation * glm::mat4(
                 u[0], v[0], w[0], 0.f,
                 u[1], v[1], w[1], 0.f,
                 u[2], v[2], w[2], 0.f,
@@ -63,14 +65,6 @@ void Camera::setViewMatrices() {
 }
 
 void Camera::updateViewPlanes(float farPlaneNew, float nearPlaneNew) {
-
-//    std::cout << Camera::farPlane << std::endl;
-//    std::cout << Camera::nearPlane << std::endl;
-
-//    std::cout << "passed" << std::endl;
-
-//    std::cout << farPlaneNew << std::endl;
-//    std::cout << nearPlaneNew << std::endl;
 
     Camera::farPlane = farPlaneNew;
     Camera::nearPlane = nearPlaneNew;
@@ -133,6 +127,19 @@ void Camera::updateViewMatricesTranslate(glm::mat4& translate) {
     Camera::currentTranslation = Camera::currentTranslation * translate;
 }
 
+void Camera::updateViewMatricesRotation(glm::mat4& rotation) {
+
+    // set view matrices
+    Camera::viewMatrix =  rotation * Camera::viewMatrix;
+    Camera::invViewMatrix = glm::inverse(viewMatrix);
+
+    // set projecion and view matices
+    Camera::projViewMatrix =  Camera::projMatrix * Camera::viewMatrix;
+
+    // accumulate current translation
+    Camera::currentRotation = Camera::currentRotation* rotation;
+}
+
 
 void Camera::WPressed(float speed) {
     // translate along direciton of look vector
@@ -175,7 +182,7 @@ void Camera::DPressed(float speed) {
     auto rightDir = -1.f * glm::cross(Camera::look, Camera::up);
 
     // translation matrix
-    auto transMat = getTranslationMatrix(rightDir[0] * speed, rightDir[1] * speed, rightDir[2] * speed);
+    auto transMat = getTranslationMatrix(rightDir[0] * 0.8f * speed, rightDir[1] *  0.8f * speed, rightDir[2] *  0.8f * speed);
 
     // apply to the view matrix
     Camera::updateViewMatricesTranslate(transMat);
@@ -197,6 +204,23 @@ void Camera::CtrlPressed(float speed) {
     // apply to the view matrix
     Camera::updateViewMatricesTranslate(transMat);
 }
+
+
+void Camera::RotateX(float deltaX) {
+    auto angle = ROTATION_SCALE * 360.f * deltaX / static_cast<float>(Camera::aspectRatio * Camera::height);
+
+    auto rotation = getRotationMatrixY(angle);
+
+    Camera::updateViewMatricesRotation(rotation);
+}
+
+
+void Camera::RotateY(float deltaY) {
+    auto sensitivity = deltaY / 500.f;
+
+}
+
+
 
 
 
