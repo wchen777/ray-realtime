@@ -58,7 +58,7 @@ void MainWindow::initialize() {
 
     // New checkboxes for extra credit filters
     filter3 = new QCheckBox();
-    filter3->setText(QStringLiteral("Per-Pixel Filter Extra: ???"));
+    filter3->setText(QStringLiteral("Per-Pixel Filter Extra: Color Swap"));
     filter3->setChecked(false);
 
     filter4 = new QCheckBox();
@@ -208,6 +208,8 @@ void MainWindow::finish() {
 void MainWindow::connectUIElements() {
     connectPerPixelFilter();
     connectKernelBasedFilter();
+    connectPerPixelFilterExtra();
+    connectKernelBasedFilterExtra();
     connectUploadFile();
     connectParam1();
     connectParam2();

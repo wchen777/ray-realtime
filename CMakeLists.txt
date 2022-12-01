@@ -83,6 +83,7 @@ qt6_add_resources(${PROJECT_NAME} "Resources"
     PREFIX
         "/"
     FILES
+        resources/shaders/kitten.png
         resources/shaders/default.frag
         resources/shaders/default.vert
         resources/shaders/texture.frag

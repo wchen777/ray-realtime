@@ -127,7 +127,7 @@ void Realtime::paintGL() {
     // set the current draw buffer to be render buffer
     Realtime::SetRenderFBO();
 
-    // Bind the shader
+    // Bind the render shader
     glUseProgram(Realtime::shaderRender);
 
     // initialize uniforms, not per object
@@ -140,10 +140,10 @@ void Realtime::paintGL() {
     // unbind render shader
     glUseProgram(0);
 
-    // draw render buffer with post-processing effects, set uniforms as necessary
+    // draw texture buffer with post-processing effects, set uniforms as necessary
     Realtime::DrawTextureFBO();
 
-    // Unbind the shader
+    // Unbind the texture shader
     glUseProgram(0);
 
 }
@@ -157,7 +157,6 @@ void Realtime::resizeGL(int w, int h) {
 
     // Tells OpenGL how big the screen is
     glViewport(0, 0, Realtime::screenWidth, Realtime::screenHeight);
-
 
     // if the scene isn't initialized yet
     if (!Realtime::isInitialized) {
@@ -178,6 +177,7 @@ void Realtime::resizeGL(int w, int h) {
 
     // destroy old FBO
     Realtime::MakeFBO();
+
 
 //    // destroy old buffers
 //    Realtime::DestroyBuffers();
@@ -265,6 +265,8 @@ void Realtime::settingsChanged() {
     // set the current filters
     Realtime::perPixelFilter = settings.perPixelFilter;
     Realtime::kernelBasedFilter = settings.kernelBasedFilter;
+    Realtime::perPixelFilterExtra = settings.perPixelFilterExtra;
+    Realtime::kernelBasedFilterExtra = settings.kernelBasedFilterExtra;
 
 
 //    std::cout << "exit" << std::endl;

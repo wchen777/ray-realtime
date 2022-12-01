@@ -65,6 +65,8 @@ public:
     GLuint fbo_renderbuffer;
     GLuint fbo_texturebuffer;
 
+    GLuint m_kitten_texture;
+
     // texture shader stuff
     GLuint fullscreen_vbo;
     GLuint fullscreen_vao;

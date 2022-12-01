@@ -10,7 +10,7 @@
  * go through each mesh object struct and generate and bind the VBOs and VAOs
 */
 void Realtime::InitializeBuffers() {
-    this->makeCurrent();
+//    this->makeCurrent();
 
     // map from string key to VBO
     std::unordered_map<std::string, GLuint> keyToVBO;
@@ -58,14 +58,14 @@ void Realtime::InitializeBuffers() {
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
-    this->doneCurrent();
+//    this->doneCurrent();
 }
 
 /*
  * initialize the uniform associated with the lights in the scene that are separate from each individual object
 */
 void Realtime::InitializeLightUniforms() {
-    this->makeCurrent();
+//    this->makeCurrent();
 
     // GLOBAL WEIGHTS
 
@@ -123,14 +123,14 @@ void Realtime::InitializeLightUniforms() {
     GLint num_lights_loc = glGetUniformLocation(Realtime::shaderRender, "num_lights");
     glUniform1i(num_lights_loc, count);
 
-    this->doneCurrent();
+//    this->doneCurrent();
 }
 
 /*
  * initialize the uniform associated with the camera in the scene that are separate from each individual object
 */
 void Realtime::InitializeCameraUniforms() {
-    this->makeCurrent();
+//    this->makeCurrent();
 
 //     pass in VP matrix as a uniform (VP is already calculated in camera)
 //    std::cout << Realtime::sceneCamera->getViewProjMatrix()[0][0] << std::endl;
@@ -147,7 +147,7 @@ void Realtime::InitializeCameraUniforms() {
     GLint cam_pos_loc = glGetUniformLocation(Realtime::shaderRender, "cam_pos");
     glUniform3fv(cam_pos_loc, 1, &Realtime::sceneCamera->pos[0]);
 
-    this->doneCurrent();
+//    this->doneCurrent();
 }
 
 
@@ -155,7 +155,7 @@ void Realtime::InitializeCameraUniforms() {
  * go through each buffer and destroy them. clean up meshes only if we are exiting the scene
 */
 void Realtime::DestroyBuffers(bool isExit) {
-    this->makeCurrent();
+//    this->makeCurrent();
     // destroy old buffers
     for (MeshPrimitive& mesh : Realtime::objectMeshes) {
         // if we are exiting, always clean up
@@ -165,7 +165,7 @@ void Realtime::DestroyBuffers(bool isExit) {
             glDeleteVertexArrays(1, &mesh.vao);
         }
     }
-    this->doneCurrent();
+//    this->doneCurrent();
 }
 
 
@@ -173,7 +173,7 @@ void Realtime::DestroyBuffers(bool isExit) {
  * go through each mesh object struct and draw them on the screen, initializing the correct uniform variables (per object)
 */
 void Realtime::DrawBuffers() {
-    this->makeCurrent();
+//    this->makeCurrent();
 
     // initialize uniforms, draw the object
     for (MeshPrimitive& mesh : Realtime::objectMeshes) {
@@ -214,19 +214,22 @@ void Realtime::DrawBuffers() {
 //        std::cout << "draw size: " << mesh.trimesh->m_vertexData.size() << std::endl;
     }
 
-    this->doneCurrent();
+//    this->doneCurrent();
 }
 
 
 
 void Realtime::MakeFBO() {
 
-    this->makeCurrent();
+//    std::cout << "before tbuf" << Realtime::fbo_texturebuffer << std::endl;
+
     // generate texture buffer as our output buffer
     glActiveTexture(GL_TEXTURE0);
-    glGenTextures(1, &fbo_texturebuffer);
+    glGenTextures(1, &(Realtime::fbo_texturebuffer));
     // bind it
-    glBindTexture(GL_TEXTURE_2D, fbo_texturebuffer);
+    glBindTexture(GL_TEXTURE_2D, Realtime::fbo_texturebuffer);
+
+//    std::cout << "after tbuf" << Realtime::fbo_texturebuffer << std::endl;
 
     // set format
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, Realtime::screenWidth, Realtime::screenHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
@@ -237,6 +240,8 @@ void Realtime::MakeFBO() {
 
     // unbind
     glBindTexture(GL_TEXTURE_2D, 0);
+
+    // -------------------------------
 
     // generate and bind renderbuffer
     glGenRenderbuffers(1, &fbo_renderbuffer);
@@ -253,24 +258,23 @@ void Realtime::MakeFBO() {
     glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 
     // Add our texture as a color attachment, and our renderbuffer as a depth+stencil attachment, to our FBO
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fbo_texturebuffer, 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, Realtime::fbo_texturebuffer, 0);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, fbo_renderbuffer);
 
     // Unbind the FBO
     glBindFramebuffer(GL_FRAMEBUFFER, Realtime::defaultFBO);
 
-    this->doneCurrent();
 }
 
 void Realtime::DestroyFBO() {
 
-    this->makeCurrent();
+//    this->makeCurrent();
 
     glDeleteTextures(1, &fbo_renderbuffer);
     glDeleteTextures(1, &fbo_texturebuffer);
     glDeleteTextures(1, &fbo);
 
-    this->doneCurrent();
+//    this->doneCurrent();
 }
 
 
@@ -279,7 +283,9 @@ void Realtime::DestroyFBO() {
 */
 void Realtime::SetRenderFBO() {
 
-    this->makeCurrent();
+//    this->makeCurrent();
+
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // bind current framebuffer
     glBindFramebuffer(GL_FRAMEBUFFER, Realtime::fbo);
@@ -290,7 +296,7 @@ void Realtime::SetRenderFBO() {
     // clear the screen
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    this->doneCurrent();
+//    this->doneCurrent();
 }
 
 
@@ -299,7 +305,7 @@ void Realtime::SetRenderFBO() {
 */
 void Realtime::DrawTextureFBO() {
 
-    this->makeCurrent();
+//    this->makeCurrent();
 
     // bind default framebuffer
     glBindFramebuffer(GL_FRAMEBUFFER, Realtime::defaultFBO);
@@ -320,13 +326,21 @@ void Realtime::DrawTextureFBO() {
     glUniform1i(glGetUniformLocation(Realtime::shaderTexture, "perPixelExtra"), Realtime::perPixelFilterExtra);
     glUniform1i(glGetUniformLocation(Realtime::shaderTexture, "kernelBasedExtra"), Realtime::kernelBasedFilterExtra);
 
+    glUniform1i(glGetUniformLocation(Realtime::shaderTexture, "height"), Realtime::screenHeight);
+    glUniform1i(glGetUniformLocation(Realtime::shaderTexture, "width"), Realtime::screenWidth);
+
     // bind the fullscreen quad
     glBindVertexArray(Realtime::fullscreen_vao);
 
+//    std::cout << fbo_texturebuffer << std::endl;
+
     // draw the texture FBO
-    glActiveTexture(GL_TEXTURE0); // set active texture
+    glActiveTexture(GL_TEXTURE0); // set active texture to slot 0
     // bind active texture
     glBindTexture(GL_TEXTURE_2D, Realtime::fbo_texturebuffer);
+//    glBindTexture(GL_TEXTURE_2D, m_kitten_texture);
+
+//    std::cout << fbo_texturebuffer << std::endl;
 
     // draw to screen
     glDrawArrays(GL_TRIANGLES, 0, 6);
@@ -336,7 +350,7 @@ void Realtime::DrawTextureFBO() {
     glBindVertexArray(0);
     glUseProgram(0);
 
-    this->doneCurrent();
+//    this->doneCurrent();
 }
 
 
@@ -345,10 +359,37 @@ void Realtime::DrawTextureFBO() {
  */
 void Realtime::SetupTextureShader() {
 
-    this->makeCurrent();
+//    this->makeCurrent();
+
+    // Prepare filepath
+    QString kitten_filepath = QString(":/resources/shaders/kitten.png");
+
+    // Task 1: Obtain image from filepath
+    auto m_image = QImage(kitten_filepath);
+
+    // Task 2: Format image to fit OpenGL
+    m_image = m_image.convertToFormat(QImage::Format_RGBA8888).mirrored();
+
+    // Task 3: Generate kitten texture
+    glGenTextures(1, &m_kitten_texture);
+
+    // Task 9: Set the active texture slot to texture slot 0
+    glActiveTexture(GL_TEXTURE0);
+
+    // Task 4: Bind kitten texture
+    glBindTexture(GL_TEXTURE_2D, m_kitten_texture);
+
+    // Task 5: Load image into kitten texture
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_image.width(), m_image.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, m_image.bits());
+
+    // Task 6: Set min and mag filters' interpolation mode to linear
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    // Task 7: Unbind kitten texture
+    glBindTexture(GL_TEXTURE_2D, 0);
 
     glUseProgram(Realtime::shaderTexture);
-
     // bind, create 2d sampler, unbind
     GLint samplerLoc = glGetUniformLocation(Realtime::shaderTexture, "texture_samp");
     glUniform1i(samplerLoc, 0);
@@ -388,5 +429,5 @@ void Realtime::SetupTextureShader() {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
-    this->doneCurrent();
+//    this->doneCurrent();
 }
