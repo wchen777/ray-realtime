@@ -1,5 +1,6 @@
 #include "realtime.h"
 #include "settings.h"
+#include "filter/filter.h"
 #include <iostream>
 #include <ostream>
 #include <map>
@@ -328,6 +329,8 @@ void Realtime::DrawTextureFBO() {
 
     glUniform1i(glGetUniformLocation(Realtime::shaderTexture, "height"), Realtime::screenHeight);
     glUniform1i(glGetUniformLocation(Realtime::shaderTexture, "width"), Realtime::screenWidth);
+    glUniformMatrix3fv(glGetUniformLocation(Realtime::shaderTexture, "sharpen"), 1, GL_FALSE, &SHARPEN_FILTER[0][0]);
+    glUniformMatrix3fv(glGetUniformLocation(Realtime::shaderTexture, "laplacian"), 1, GL_FALSE, &LAPLACIAN_FILTER[0][0]);
 
     // bind the fullscreen quad
     glBindVertexArray(Realtime::fullscreen_vao);

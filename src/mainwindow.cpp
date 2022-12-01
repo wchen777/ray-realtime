@@ -62,7 +62,7 @@ void MainWindow::initialize() {
     filter3->setChecked(false);
 
     filter4 = new QCheckBox();
-    filter4->setText(QStringLiteral("Kernel-Based Filter Extra: ???"));
+    filter4->setText(QStringLiteral("Kernel-Based Filter Extra: Laplacian"));
     filter4->setChecked(false);
 
     // Create file uploader for scene file

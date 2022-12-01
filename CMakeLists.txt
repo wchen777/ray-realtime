@@ -59,6 +59,7 @@ add_executable(${PROJECT_NAME}
     src/trimeshes/obj_mesh.h
     src/renderer/debug.h
     src/renderer/primitive.h
+    src/filter/filter.h
 )
 
 # GLM: this creates its library and allows you to `#include "glm/..."`
