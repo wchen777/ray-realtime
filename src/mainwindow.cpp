@@ -48,13 +48,22 @@ void MainWindow::initialize() {
 
     // Create checkbox for per-pixel filter
     filter1 = new QCheckBox();
-    filter1->setText(QStringLiteral("Per-Pixel Filter"));
+    filter1->setText(QStringLiteral("Per-Pixel Filter: Invert"));
     filter1->setChecked(false);
 
     // Create checkbox for kernel-based filter
     filter2 = new QCheckBox();
-    filter2->setText(QStringLiteral("Kernel-Based Filter"));
+    filter2->setText(QStringLiteral("Kernel-Based Filter: Sharpen"));
     filter2->setChecked(false);
+
+    // New checkboxes for extra credit filters
+    filter3 = new QCheckBox();
+    filter3->setText(QStringLiteral("Per-Pixel Filter Extra: ???"));
+    filter3->setChecked(false);
+
+    filter4 = new QCheckBox();
+    filter4->setText(QStringLiteral("Kernel-Based Filter Extra: ???"));
+    filter4->setChecked(false);
 
     // Create file uploader for scene file
     uploadFile = new QPushButton();
@@ -171,6 +180,8 @@ void MainWindow::initialize() {
     vLayout->addWidget(filters_label);
     vLayout->addWidget(filter1);
     vLayout->addWidget(filter2);
+    vLayout->addWidget(filter3);
+    vLayout->addWidget(filter4);
     // Extra Credit:
     vLayout->addWidget(ec_label);
     vLayout->addWidget(ec1);
@@ -211,6 +222,14 @@ void MainWindow::connectPerPixelFilter() {
 
 void MainWindow::connectKernelBasedFilter() {
     connect(filter2, &QCheckBox::clicked, this, &MainWindow::onKernelBasedFilter);
+}
+
+void MainWindow::connectPerPixelFilterExtra() {
+    connect(filter3, &QCheckBox::clicked, this, &MainWindow::onPerPixelFilterExtra);
+}
+
+void MainWindow::connectKernelBasedFilterExtra() {
+    connect(filter4, &QCheckBox::clicked, this, &MainWindow::onKernelBasedFilterExtra);
 }
 
 void MainWindow::connectUploadFile() {
@@ -255,6 +274,16 @@ void MainWindow::onPerPixelFilter() {
 
 void MainWindow::onKernelBasedFilter() {
     settings.kernelBasedFilter = !settings.kernelBasedFilter;
+    realtime->settingsChanged();
+}
+
+void MainWindow::onPerPixelFilterExtra() {
+    settings.perPixelFilterExtra = !settings.perPixelFilterExtra;
+    realtime->settingsChanged();
+}
+
+void MainWindow::onKernelBasedFilterExtra() {
+    settings.kernelBasedFilterExtra = !settings.kernelBasedFilterExtra;
     realtime->settingsChanged();
 }
 

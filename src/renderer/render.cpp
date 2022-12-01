@@ -1,4 +1,5 @@
 #include "realtime.h"
+#include "settings.h"
 #include <iostream>
 #include <ostream>
 #include <map>
@@ -69,15 +70,15 @@ void Realtime::InitializeLightUniforms() {
     // GLOBAL WEIGHTS
 
     // pass m_ka into the fragment shader as a uniform
-    GLint ka_loc = glGetUniformLocation(Realtime::shader, "k_a");
+    GLint ka_loc = glGetUniformLocation(Realtime::shaderRender, "k_a");
     glUniform1f(ka_loc, Realtime::sceneRenderData.globalData.ka);
 
     // pass m_kd into the fragment shader as a uniform
-    GLint kd_loc = glGetUniformLocation(Realtime::shader, "k_d");
+    GLint kd_loc = glGetUniformLocation(Realtime::shaderRender, "k_d");
     glUniform1f(kd_loc, Realtime::sceneRenderData.globalData.kd);
 
     // pass k_s as a uniform
-    GLint ks_loc = glGetUniformLocation(Realtime::shader, "k_s");
+    GLint ks_loc = glGetUniformLocation(Realtime::shaderRender, "k_s");
     glUniform1f(ks_loc, Realtime::sceneRenderData.globalData.ks);
 
     int count = 0;
@@ -88,38 +89,38 @@ void Realtime::InitializeLightUniforms() {
         }
 
         // light pos uniform
-        GLint light_pos_loc = glGetUniformLocation(Realtime::shader, ("light_positions[" + std::to_string(count) + "]").c_str());
+        GLint light_pos_loc = glGetUniformLocation(Realtime::shaderRender, ("light_positions[" + std::to_string(count) + "]").c_str());
         glUniform3fv(light_pos_loc, 1, &light.pos[0]);
 
         // light dir uniform
-        GLint light_dir_loc = glGetUniformLocation(Realtime::shader, ("light_dirs[" + std::to_string(count) + "]").c_str());
+        GLint light_dir_loc = glGetUniformLocation(Realtime::shaderRender, ("light_dirs[" + std::to_string(count) + "]").c_str());
         glUniform3fv(light_dir_loc, 1, &light.dir[0]);
 
         // light color uniform
-        GLint light_colors_loc = glGetUniformLocation(Realtime::shader, ("light_colors[" + std::to_string(count) + "]").c_str());
+        GLint light_colors_loc = glGetUniformLocation(Realtime::shaderRender, ("light_colors[" + std::to_string(count) + "]").c_str());
         glUniform3fv(light_colors_loc, 1, &light.color[0]);
 
         // light attenuation functions uniform
-        GLint light_functions_loc = glGetUniformLocation(Realtime::shader, ("light_functions[" + std::to_string(count) + "]").c_str());
+        GLint light_functions_loc = glGetUniformLocation(Realtime::shaderRender, ("light_functions[" + std::to_string(count) + "]").c_str());
         glUniform3fv(light_functions_loc, 1, &light.function[0]);
 
         // light angle uniform
-        GLint light_angles_loc = glGetUniformLocation(Realtime::shader, ("light_angles[" + std::to_string(count) + "]").c_str());
+        GLint light_angles_loc = glGetUniformLocation(Realtime::shaderRender, ("light_angles[" + std::to_string(count) + "]").c_str());
         glUniform1f(light_angles_loc, light.angle);
 
         // light penumbra uniform
-        GLint light_penumbras_loc = glGetUniformLocation(Realtime::shader, ("light_penumbras[" + std::to_string(count) + "]").c_str());
+        GLint light_penumbras_loc = glGetUniformLocation(Realtime::shaderRender, ("light_penumbras[" + std::to_string(count) + "]").c_str());
         glUniform1f(light_penumbras_loc, light.penumbra);
 
         // light type uniform
-        GLint light_type_loc = glGetUniformLocation(Realtime::shader, ("light_types[" + std::to_string(count) + "]").c_str());
+        GLint light_type_loc = glGetUniformLocation(Realtime::shaderRender, ("light_types[" + std::to_string(count) + "]").c_str());
         glUniform1i(light_type_loc, static_cast<std::underlying_type_t<LightType>>(light.type));
 
         count++;
     }
 
     // num lights uniform
-    GLint num_lights_loc = glGetUniformLocation(Realtime::shader, "num_lights");
+    GLint num_lights_loc = glGetUniformLocation(Realtime::shaderRender, "num_lights");
     glUniform1i(num_lights_loc, count);
 
     this->doneCurrent();
@@ -134,16 +135,16 @@ void Realtime::InitializeCameraUniforms() {
 //     pass in VP matrix as a uniform (VP is already calculated in camera)
 //    std::cout << Realtime::sceneCamera->getViewProjMatrix()[0][0] << std::endl;
 
-//    GLint PV_mat_loc = glGetUniformLocation(Realtime::shader, "PV_matrix");
+//    GLint PV_mat_loc = glGetUniformLocation(Realtime::shaderRender, "PV_matrix");
 //    glUniformMatrix4fv(PV_mat_loc, 1, GL_FALSE, &Realtime::sceneCamera->getProjViewMatrix()[0][0]);
 
-    GLint P_mat_loc = glGetUniformLocation(Realtime::shader, "proj_matrix");
+    GLint P_mat_loc = glGetUniformLocation(Realtime::shaderRender, "proj_matrix");
     glUniformMatrix4fv(P_mat_loc, 1, GL_FALSE, &Realtime::sceneCamera->getProjMatrix()[0][0]);
 
-    GLint PV_mat_loc = glGetUniformLocation(Realtime::shader, "view_matrix");
+    GLint PV_mat_loc = glGetUniformLocation(Realtime::shaderRender, "view_matrix");
     glUniformMatrix4fv(PV_mat_loc, 1, GL_FALSE, &Realtime::sceneCamera->getViewMatrix()[0][0]);
 
-    GLint cam_pos_loc = glGetUniformLocation(Realtime::shader, "cam_pos");
+    GLint cam_pos_loc = glGetUniformLocation(Realtime::shaderRender, "cam_pos");
     glUniform3fv(cam_pos_loc, 1, &Realtime::sceneCamera->pos[0]);
 
     this->doneCurrent();
@@ -183,37 +184,209 @@ void Realtime::DrawBuffers() {
         glBindVertexArray(mesh.vao);
 
         // pass in model matrix as a uniform
-        GLint model_mat_loc = glGetUniformLocation(Realtime::shader, "model_matrix");
+        GLint model_mat_loc = glGetUniformLocation(Realtime::shaderRender, "model_matrix");
         glUniformMatrix4fv(model_mat_loc, 1, GL_FALSE, &mesh.modelMatrix[0][0]);
 
         // pass in inv transpose model matrix as a uniform
-        GLint inv_transpose_model_mat_loc = glGetUniformLocation(Realtime::shader, "inv_trans_model_matrix");
+        GLint inv_transpose_model_mat_loc = glGetUniformLocation(Realtime::shaderRender, "inv_trans_model_matrix");
         glUniformMatrix4fv(inv_transpose_model_mat_loc, 1, GL_FALSE, &mesh.invTransposeModelMatrix[0][0]);
 
         // pass in shininess
-        GLint shininess_loc = glGetUniformLocation(Realtime::shader, "shininess");
+        GLint shininess_loc = glGetUniformLocation(Realtime::shaderRender, "shininess");
         glUniform1f(shininess_loc, mesh.material.shininess);
 
         // pass in cAmbient
-        GLint cAmbient_loc = glGetUniformLocation(Realtime::shader, "cAmbient");
+        GLint cAmbient_loc = glGetUniformLocation(Realtime::shaderRender, "cAmbient");
         glUniform3fv(cAmbient_loc, 1, &mesh.material.cAmbient[0]);
 
         // pass in cDiffuse
-        GLint cDiffuse_loc = glGetUniformLocation(Realtime::shader, "cDiffuse");
+        GLint cDiffuse_loc = glGetUniformLocation(Realtime::shaderRender, "cDiffuse");
         glUniform3fv(cDiffuse_loc, 1, &mesh.material.cDiffuse[0]);
 
         // pass in cSpecular
-        GLint cSpecular_loc = glGetUniformLocation(Realtime::shader, "cSpecular");
+        GLint cSpecular_loc = glGetUniformLocation(Realtime::shaderRender, "cSpecular");
         glUniform3fv(cSpecular_loc, 1, &mesh.material.cSpecular[0]);
 
         // draw command for this object
         glDrawArrays(GL_TRIANGLES, 0, mesh.trimesh->m_vertexData.size() / 6);
         // Unbind Vertex Array
         glBindVertexArray(0);
-
 //        std::cout << "draw size: " << mesh.trimesh->m_vertexData.size() << std::endl;
-
     }
+
+    this->doneCurrent();
+}
+
+
+
+void Realtime::MakeFBO() {
+
+    this->makeCurrent();
+    // generate texture buffer as our output buffer
+    glActiveTexture(GL_TEXTURE0);
+    glGenTextures(1, &fbo_texturebuffer);
+    // bind it
+    glBindTexture(GL_TEXTURE_2D, fbo_texturebuffer);
+
+    // set format
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, Realtime::screenWidth, Realtime::screenHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+
+    // set parameters
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    // unbind
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    // generate and bind renderbuffer
+    glGenRenderbuffers(1, &fbo_renderbuffer);
+    glBindRenderbuffer(GL_RENDERBUFFER, fbo_renderbuffer);
+
+    // set format
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, Realtime::screenWidth, Realtime::screenHeight);
+
+    // unbind
+    glBindRenderbuffer(GL_RENDERBUFFER, 0);
+
+    // Generate and bind an FBO
+    glGenFramebuffers(1, &fbo);
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+    // Add our texture as a color attachment, and our renderbuffer as a depth+stencil attachment, to our FBO
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fbo_texturebuffer, 0);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, fbo_renderbuffer);
+
+    // Unbind the FBO
+    glBindFramebuffer(GL_FRAMEBUFFER, Realtime::defaultFBO);
+
+    this->doneCurrent();
+}
+
+void Realtime::DestroyFBO() {
+
+    this->makeCurrent();
+
+    glDeleteTextures(1, &fbo_renderbuffer);
+    glDeleteTextures(1, &fbo_texturebuffer);
+    glDeleteTextures(1, &fbo);
+
+    this->doneCurrent();
+}
+
+
+/*
+ * sets the framebuffer to be drawn upon
+*/
+void Realtime::SetRenderFBO() {
+
+    this->makeCurrent();
+
+    // bind current framebuffer
+    glBindFramebuffer(GL_FRAMEBUFFER, Realtime::fbo);
+
+    // adjust viewport
+    glViewport(0, 0, Realtime::screenWidth, Realtime::screenHeight);
+
+    // clear the screen
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    this->doneCurrent();
+}
+
+
+/*
+    draw to the viewport the data stored in the render buffer using the texture shader
+*/
+void Realtime::DrawTextureFBO() {
+
+    this->makeCurrent();
+
+    // bind default framebuffer
+    glBindFramebuffer(GL_FRAMEBUFFER, Realtime::defaultFBO);
+
+    // clear screen
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    // set the shader to be the texture shader
+    glUseProgram(Realtime::shaderTexture);
+
+    // set uniforms depending on the current settings
+
+//    std::cout << Realtime::perPixelFilter << std::endl;
+
+    // pass in the uniforms for the filters
+    glUniform1i(glGetUniformLocation(Realtime::shaderTexture, "perPixel"), Realtime::perPixelFilter);
+    glUniform1i(glGetUniformLocation(Realtime::shaderTexture, "kernelBased"), Realtime::kernelBasedFilter);
+    glUniform1i(glGetUniformLocation(Realtime::shaderTexture, "perPixelExtra"), Realtime::perPixelFilterExtra);
+    glUniform1i(glGetUniformLocation(Realtime::shaderTexture, "kernelBasedExtra"), Realtime::kernelBasedFilterExtra);
+
+    // bind the fullscreen quad
+    glBindVertexArray(Realtime::fullscreen_vao);
+
+    // draw the texture FBO
+    glActiveTexture(GL_TEXTURE0); // set active texture
+    // bind active texture
+    glBindTexture(GL_TEXTURE_2D, Realtime::fbo_texturebuffer);
+
+    // draw to screen
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+
+    // unbindings
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glBindVertexArray(0);
+    glUseProgram(0);
+
+    this->doneCurrent();
+}
+
+
+/*
+ * bind and create necessary data for the texture shader
+ */
+void Realtime::SetupTextureShader() {
+
+    this->makeCurrent();
+
+    glUseProgram(Realtime::shaderTexture);
+
+    // bind, create 2d sampler, unbind
+    GLint samplerLoc = glGetUniformLocation(Realtime::shaderTexture, "texture_samp");
+    glUniform1i(samplerLoc, 0);
+    glUseProgram(0);
+
+    // full screen quad
+    std::vector<GLfloat> fullscreen_quad_data =
+    { //     POSITIONS    //
+        -1.f,  1.f, 0.0f, // top left
+         0.f, 1.f,
+        -1.f, -1.f, 0.0f, // bottom left
+         0.f, 0.f,
+         1.f, -1.f, 0.0f, // bottom right
+         1.f, 0.f,
+         1.f,  1.f, 0.0f, // top right
+         1.f, 1.f,
+        -1.f,  1.f, 0.0f, // top left
+         0.f, 1.f,
+         1.f, -1.f, 0.0f, // bottom right
+         1.f, 0.f,
+    };
+
+    // Generate and bind a VBO and a VAO for a fullscreen quad
+    glGenBuffers(1, &fullscreen_vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, fullscreen_vbo);
+    glBufferData(GL_ARRAY_BUFFER, fullscreen_quad_data.size()*sizeof(GLfloat), fullscreen_quad_data.data(), GL_STATIC_DRAW);
+    glGenVertexArrays(1, &fullscreen_vao);
+    glBindVertexArray(fullscreen_vao);
+
+    // add attributes for VAO
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), nullptr);
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), reinterpret_cast<void*>(3 * sizeof(GL_FLOAT)));
+
+    // Unbind the fullscreen quad's VBO and VAO
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
 
     this->doneCurrent();
 }

@@ -34,7 +34,14 @@ void Realtime::finish() {
 
     // Students: anything requiring OpenGL calls when the program exits should be done here
 
-    glDeleteProgram(Realtime::shader);
+    // delete shaders
+    glDeleteProgram(Realtime::shaderTexture);
+    glDeleteProgram(Realtime::shaderRender);
+
+    // delete fullscreen vao/vbo data
+    glDeleteVertexArrays(1, &fullscreen_vao);
+    glDeleteBuffers(1, &fullscreen_vbo);
+
     Realtime::DestroyMeshes();
 
     // destroy all buffers
@@ -44,6 +51,9 @@ void Realtime::finish() {
     if (Realtime::isInitialized) {
         delete Realtime::sceneCamera;
     }
+
+    // destroy FBO
+    Realtime::DestroyFBO();
 
     this->doneCurrent();
 }
@@ -70,14 +80,29 @@ void Realtime::initializeGL() {
     glEnable(GL_DEPTH_TEST);
     // Tells OpenGL to only draw the front face
     glEnable(GL_CULL_FACE);
+
+    // resizing
+    Realtime::screenHeight = size().height() * m_devicePixelRatio;
+    Realtime::screenWidth = size().width() * m_devicePixelRatio;
+
     // Tells OpenGL how big the screen is
-    glViewport(0, 0, size().width() * m_devicePixelRatio, size().height() * m_devicePixelRatio);
+    glViewport(0, 0, Realtime::screenWidth, Realtime::screenHeight);
 
     // Students: anything requiring OpenGL calls when the program starts should be done here
 
     // initialize the shader
-    Realtime::shader = ShaderLoader::createShaderProgram(":/resources/shaders/default.vert", ":/resources/shaders/default.frag");
+    Realtime::shaderRender = ShaderLoader::createShaderProgram(":/resources/shaders/default.vert", ":/resources/shaders/default.frag");
+    Realtime::shaderTexture = ShaderLoader::createShaderProgram(":/resources/shaders/texture.vert", ":/resources/shaders/texture.frag");
+    // initialize the default FBO
 
+//    Realtime::defaultFBO = 0;
+    Realtime::defaultFBO = 2; // UNCOMMENT TO CHANGE DEFAULT FBO VALUE
+
+    // setup the texture shader for post-processing effects
+    Realtime::SetupTextureShader();
+
+    // create FBO
+    Realtime::MakeFBO();
 
 //    Realtime::InitializeBuffers();
 }
@@ -99,11 +124,11 @@ void Realtime::paintGL() {
 
 //    std::cout << "paint gl loop" << std::endl;
 
-    // Task 15: Clear the screen here
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    // set the current draw buffer to be render buffer
+    Realtime::SetRenderFBO();
 
     // Bind the shader
-    glUseProgram(Realtime::shader);
+    glUseProgram(Realtime::shaderRender);
 
     // initialize uniforms, not per object
     Realtime::InitializeCameraUniforms();
@@ -111,6 +136,12 @@ void Realtime::paintGL() {
 
     // initilialize uniforms per object, draw object
     Realtime::DrawBuffers();
+
+    // unbind render shader
+    glUseProgram(0);
+
+    // draw render buffer with post-processing effects, set uniforms as necessary
+    Realtime::DrawTextureFBO();
 
     // Unbind the shader
     glUseProgram(0);
@@ -120,8 +151,13 @@ void Realtime::paintGL() {
 void Realtime::resizeGL(int w, int h) {
 
     std::cout << "resize" << std::endl;
+
+    Realtime::screenHeight = size().height() * m_devicePixelRatio;
+    Realtime::screenWidth = size().width() * m_devicePixelRatio;
+
     // Tells OpenGL how big the screen is
-    glViewport(0, 0, size().width() * m_devicePixelRatio, size().height() * m_devicePixelRatio);
+    glViewport(0, 0, Realtime::screenWidth, Realtime::screenHeight);
+
 
     // if the scene isn't initialized yet
     if (!Realtime::isInitialized) {
@@ -136,6 +172,12 @@ void Realtime::resizeGL(int w, int h) {
     if (Realtime::sceneCamera->getAspectRatio() != aspectRatio) {
         Realtime::sceneCamera->updateAspectRatio(aspectRatio);
     }
+
+    // destroy old FBO
+    Realtime::DestroyFBO();
+
+    // destroy old FBO
+    Realtime::MakeFBO();
 
 //    // destroy old buffers
 //    Realtime::DestroyBuffers();
@@ -154,7 +196,7 @@ void Realtime::sceneChanged() {
     // destroy old meshes
     Realtime::DestroyBuffers(true);
 
-    // delete the camera is the scene is initialized
+    // delete the camera and old FBOs if the scene is initialized
     if (Realtime::isInitialized) {
         delete Realtime::sceneCamera;
     }
@@ -162,11 +204,6 @@ void Realtime::sceneChanged() {
     // set current params (for on startup)
     Realtime::currentParam1 = settings.shapeParameter1;
     Realtime::currentParam2 = settings.shapeParameter2;
-
-
-//    std::cout << "fuck" << std::endl;
-//    std::cout << settings.farPlane << std::endl;
-//    std::cout << settings.nearPlane << std::endl;
 
 
     // parse the scene that was stored in settings from the call to upload scenefile
@@ -177,6 +214,9 @@ void Realtime::sceneChanged() {
     // build each primitive into a composite struct that contains the class for the trimesh, etc.
     // apply it to the realtime class
     Realtime::CompilePrimitiveMeshes();
+
+//    // create new FBOs
+//    Realtime::MakeFBO();
 
     Realtime::isInitialized = true;
     Realtime::changedScene = true;
@@ -211,9 +251,20 @@ void Realtime::settingsChanged() {
         Realtime::UpdateTesselations();
         // destroy old buffers
         Realtime::DestroyBuffers(false);
-        // destroy the old ones
+
+//        // destroy old FBO
+//        Realtime::DestroyFBO();
+
+        // create new buffers
         Realtime::InitializeBuffers();
+
+//        // create new FBO
+//        Realtime::MakeFBO();
     }
+
+    // set the current filters
+    Realtime::perPixelFilter = settings.perPixelFilter;
+    Realtime::kernelBasedFilter = settings.kernelBasedFilter;
 
 
 //    std::cout << "exit" << std::endl;

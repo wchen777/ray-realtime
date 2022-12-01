@@ -26,11 +26,15 @@ public:
     void sceneChanged();
     void settingsChanged();
 
+    int screenWidth;
+    int screenHeight;
+
     // necessary for scene and views
     SceneParser sceneParser = SceneParser{};                          // initialize the scene parser
     RenderData sceneRenderData;
     Camera* sceneCamera = NULL;
-    GLuint shader;
+    GLuint shaderRender;
+    GLuint shaderTexture;
 
     // mesh related fields
     void CompilePrimitiveMeshes();
@@ -55,6 +59,25 @@ public:
     // extra credit
     float GetParamMultiple(glm::mat4 ctm);
 
+    // FBO
+    GLuint defaultFBO;
+    GLuint fbo;
+    GLuint fbo_renderbuffer;
+    GLuint fbo_texturebuffer;
+
+    // texture shader stuff
+    GLuint fullscreen_vbo;
+    GLuint fullscreen_vao;
+    void SetupTextureShader();
+    bool perPixelFilter = false;
+    bool kernelBasedFilter = false;
+    bool perPixelFilterExtra = false;
+    bool kernelBasedFilterExtra = false;
+
+    void MakeFBO();
+    void DestroyFBO();
+    void SetRenderFBO();
+    void DrawTextureFBO();
 
 public slots:
     void tick(QTimerEvent* event);                      // Called once per tick of m_timer
