@@ -2,6 +2,8 @@
 #include <ostream>
 #include <stdexcept>
 #include "camera.h"
+//#include "glm/gtx/transform.hpp"
+//#include "glm/ext/quaternion_transform.hpp"
 //#include "glm/ext/matrix_clip_space.hpp"
 //#include "glm/ext/matrix_transform.hpp"
 
@@ -17,12 +19,12 @@ void Camera::setViewMatrices() {
     auto u = glm::cross(v, w);
 
     auto Mtranslate = getTranslationMatrix(-1 * Camera::pos[0], -1 * Camera::pos[1], -1 * Camera::pos[2]) * Camera::currentTranslation;
-    auto Mrotate = Camera::currentRotation * glm::mat4(
+    auto Mrotate = glm::mat4(
                 u[0], v[0], w[0], 0.f,
                 u[1], v[1], w[1], 0.f,
                 u[2], v[2], w[2], 0.f,
                 0.f, 0.f, 0.f, 1.f
-            );
+            ) * Camera::currentRotation;
 
     auto viewM = Mrotate * Mtranslate;
 
@@ -130,14 +132,14 @@ void Camera::updateViewMatricesTranslate(glm::mat4& translate) {
 void Camera::updateViewMatricesRotation(glm::mat4& rotation) {
 
     // set view matrices
-    Camera::viewMatrix =  rotation * Camera::viewMatrix;
+    Camera::viewMatrix =  Camera::viewMatrix * rotation;
     Camera::invViewMatrix = glm::inverse(viewMatrix);
 
     // set projecion and view matices
     Camera::projViewMatrix =  Camera::projMatrix * Camera::viewMatrix;
 
     // accumulate current translation
-    Camera::currentRotation = Camera::currentRotation* rotation;
+    Camera::currentRotation = Camera::currentRotation * rotation;
 }
 
 
@@ -207,6 +209,7 @@ void Camera::CtrlPressed(float speed) {
 
 
 void Camera::RotateX(float deltaX) {
+    // scaled angle in degrees
     auto angle = ROTATION_SCALE * 360.f * deltaX / static_cast<float>(Camera::aspectRatio * Camera::height);
 
     auto rotation = getRotationMatrixY(angle);
@@ -216,8 +219,15 @@ void Camera::RotateX(float deltaX) {
 
 
 void Camera::RotateY(float deltaY) {
-    auto sensitivity = deltaY / 500.f;
+    // scaled angle in degrees
+    auto angle = ROTATION_SCALE * 360.f * deltaY / static_cast<float>(Camera::height);
 
+    auto axis = glm::normalize(glm::cross(Camera::look, Camera::up));
+
+
+    auto rotation = getAxisAngleRotationMatrix(axis, angle);
+
+    Camera::updateViewMatricesRotation(rotation);
 }
 
 

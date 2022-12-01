@@ -47,3 +47,27 @@ glm::mat4 getTranslationMatrix(float dx, float dy, float dz) {
                      dx, dy, dz, 1);
 }
 
+// Rodrigues' formula
+glm::mat4 getAxisAngleRotationMatrix(glm::vec3& axis, float angle) {
+
+    auto theta = glm::radians(angle);
+    auto u = axis;
+
+    auto cosTheta = glm::cos(theta);
+    auto sinTheta = glm::sin(theta);
+
+    auto xyTerm = u[0]*u[1]*(1-cosTheta) + u[2]*sinTheta;
+    auto xzTerm = u[0]*u[2]*(1-cosTheta) + u[1]*sinTheta;
+    auto yzTerm = u[1]*u[2]*(1-cosTheta) + u[0]*sinTheta;
+
+    auto xyTermMin = u[0]*u[1]*(1-cosTheta) - u[2]*sinTheta;
+    auto xzTermMin = u[0]*u[2]*(1-cosTheta) - u[1]*sinTheta;
+    auto yzTermMin = u[1]*u[2]*(1-cosTheta) - u[0]*sinTheta;
+
+    return glm::mat4(
+                cosTheta+(u[0]*u[0])*(1-cosTheta), xyTerm, xzTermMin, 0.f,
+                xyTermMin, cosTheta + (u[1]*u[1])*(1-cosTheta), yzTerm, 0.f,
+                xzTerm, yzTermMin, cosTheta + (u[2]*u[2])*(1-cosTheta), 0.f,
+                0.f, 0.f, 0.f, 1.f);
+}
+
