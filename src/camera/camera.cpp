@@ -43,12 +43,12 @@ void Camera::setViewMatrices() {
 
     float tanHalfHeightAngle = glm::tan(Camera::camData.heightAngle / 2.f);
 
-    // tan (theta_h / 2) = (height / 2) / k
-    float k = static_cast<float>(Camera::height / 2.f) / tanHalfHeightAngle;
+//    // tan (theta_h / 2) = (height / 2) / k
+//    float k = static_cast<float>(Camera::height / 2.f) / tanHalfHeightAngle;
 
     // tan(theta_w / 2) = (width / 2) / k
-    float tanHalfWidthAngle = static_cast<float>(Camera::width / 2.f) / k;
-
+//    float tanHalfWidthAngle = static_cast<float>(Camera::width / 2.f) / k;
+    float tanHalfWidthAngle = Camera::aspectRatio * tanHalfHeightAngle;
 
     auto scaleMatrix = glm::mat4(
                         1.f/(Camera::farPlane * tanHalfWidthAngle), 0.f, 0.f, 0.f,
