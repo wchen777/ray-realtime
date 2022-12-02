@@ -13,8 +13,10 @@ glm::mat4 getRotationMatrixY(float angle);
 
 glm::mat4 getRotationMatrixZ(float angle);
 
+glm::mat3 getRotationMatrixY3D(float angle);
+
 glm::mat4 getTranslationMatrix(float dx, float dy, float dz);
 
-glm::mat4 getAxisAngleRotationMatrix(glm::vec3& axis, float angle);
+glm::mat3 getAxisAngleRotationMatrix3D(glm::vec3& axis, float angle);
 
 #endif // TRANSFORMS_H

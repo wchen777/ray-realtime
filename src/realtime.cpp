@@ -340,34 +340,42 @@ void Realtime::timerEvent(QTimerEvent *event) {
 
     float speed = deltaTime * UNITS_PER_SECOND;
 
+    glm::vec3 movement = glm::vec3(0.f);
+
     // W key pressed
     if (Realtime::m_keyMap[Qt::Key_W]) {
-        Realtime::sceneCamera->WPressed(speed);
+        movement += Realtime::sceneCamera->WPressed();
     }
 
     // A key pressed
     if (Realtime::m_keyMap[Qt::Key_A]) {
-        Realtime::sceneCamera->APressed(speed);
+        movement += Realtime::sceneCamera->APressed();
     }
 
     // D key pressed
     if (Realtime::m_keyMap[Qt::Key_D]) {
-        Realtime::sceneCamera->DPressed(speed);
+        movement += Realtime::sceneCamera->DPressed();
     }
 
     // S key pressed
     if (Realtime::m_keyMap[Qt::Key_S]) {
-        Realtime::sceneCamera->SPressed(speed);
+        movement += Realtime::sceneCamera->SPressed();
     }
 
     // Space key pressed
     if (Realtime::m_keyMap[Qt::Key_Space]) {
-        Realtime::sceneCamera->SpacePressed(speed);
+        movement += Realtime::sceneCamera->SpacePressed();
     }
 
     // Ctrl key pressed
     if (Realtime::m_keyMap[Qt::Key_Control] || Realtime::m_keyMap[Qt::Key_Meta]) {
-        Realtime::sceneCamera->CtrlPressed(speed);
+       movement += Realtime::sceneCamera->CtrlPressed();
+    }
+
+    if (glm::length(movement) != 0.f) {
+        // apply the accumulated translation
+        movement *= speed;
+        Realtime::sceneCamera->ApplyTranslation(movement);
     }
 
 

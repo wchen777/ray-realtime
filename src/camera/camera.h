@@ -60,31 +60,33 @@ public:
     glm::mat4 getProjMatrix() const;
     glm::mat4 getProjViewMatrix() const;
 
-    glm::mat4 currentTranslation = glm::mat4(1.f); // current translation for rebuilding
+//    glm::mat4 currentTranslation = glm::mat4(1.f); // current translation for rebuilding
+//    glm::mat4 currentRotation = glm::mat4(1.f); // current rotation for rebuilding
 
-    glm::mat4 currentRotation = glm::mat4(1.f); // current rotation for rebuilding
+//    void updateViewMatricesTranslate(glm::mat4& translate); // helper for camera transformation
+//    void updateViewMatricesRotation(glm::mat4& rotation); // helper for camera rotation
 
-    void updateViewMatricesTranslate(glm::mat4& translate); // helper for camera transformation
-    void updateViewMatricesRotation(glm::mat4& rotation); // helper for camera rotation
+    void ApplyTranslation(glm::vec3& translation);
+    void ApplyRotation(glm::mat3& rotation);
 
     // W: Translates the camera in the direction of the look vector
-    void WPressed(float speed);
+    glm::vec3 WPressed();
 
     // S: Translates the camera in the opposite direction of the look vector
-    void SPressed(float speed);
+    glm::vec3 SPressed();
 
     // A: Translates the camera in the left direction, perpendicular to the look and up vectors
-    void APressed(float speed);
+    glm::vec3 APressed();
 
     // D: Translates the camera in the right direction, also perpendicular to the look and up vectors.
     // This movement should be opposite to that of pressing A
-    void DPressed(float speed);
+    glm::vec3 DPressed();
 
     // Space: Translates the camera along the world space vector (0,1,0)
-    void SpacePressed(float speed);
+    static glm::vec3 SpacePressed();
 
     // Ctrl: Translates the camera along the world space vector (0,-1,0)
-    void CtrlPressed(float speed);
+    static glm::vec3 CtrlPressed();
 
     void RotateX(float deltaX); // rotate about world space vector 0,1,0
     void RotateY(float deltaY); // Rotates the camera about the axis defined by a vector perpendicular to the look and up vectors
