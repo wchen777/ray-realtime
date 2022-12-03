@@ -1,11 +1,13 @@
 #include "mainwindow.h"
 #include "settings.h"
+#include "raytracer_driver.h"
 
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QFileDialog>
 #include <QSettings>
 #include <QLabel>
+#include <QWidget>
 #include <QGroupBox>
 #include <iostream>
 
@@ -44,8 +46,6 @@ void MainWindow::initialize() {
     QLabel *far_label = new QLabel(); // Far plane label
     far_label->setText("Far Plane:");
 
-
-
     // Create checkbox for per-pixel filter
     filter1 = new QCheckBox();
     filter1->setText(QStringLiteral("Per-Pixel Filter: Invert"));
@@ -68,6 +68,9 @@ void MainWindow::initialize() {
     // Create file uploader for scene file
     uploadFile = new QPushButton();
     uploadFile->setText(QStringLiteral("Upload Scene File"));
+
+    uploadFileRay = new QPushButton();
+    uploadFileRay->setText(QStringLiteral("Upload Scene File (Raytracer)"));
 
     // Creates the boxes containing the parameter sliders and number boxes
     QGroupBox *p1Layout = new QGroupBox(); // horizonal slider 1 alignment
@@ -167,6 +170,7 @@ void MainWindow::initialize() {
     ec4->setChecked(false);
 
     vLayout->addWidget(uploadFile);
+    vLayout->addWidget(uploadFileRay);
     vLayout->addWidget(tesselation_label);
     vLayout->addWidget(param1_label);
     vLayout->addWidget(p1Layout);
@@ -211,6 +215,7 @@ void MainWindow::connectUIElements() {
     connectPerPixelFilterExtra();
     connectKernelBasedFilterExtra();
     connectUploadFile();
+    connectUploadFileRay();
     connectParam1();
     connectParam2();
     connectNear();
@@ -237,6 +242,11 @@ void MainWindow::connectKernelBasedFilterExtra() {
 void MainWindow::connectUploadFile() {
     connect(uploadFile, &QPushButton::clicked, this, &MainWindow::onUploadFile);
 }
+
+void MainWindow::connectUploadFileRay() {
+    connect(uploadFileRay, &QPushButton::clicked, this, &MainWindow::onUploadFileRay);
+}
+
 
 void MainWindow::connectParam1() {
     connect(p1Slider, &QSlider::valueChanged, this, &MainWindow::onValChangeP1);
@@ -302,6 +312,44 @@ void MainWindow::onUploadFile() {
     std::cout << "Loaded scenefile: \"" << configFilePath.toStdString() << "\"." << std::endl;
 
     realtime->sceneChanged();
+    realtime->isRayTraceOutput = false;
+}
+
+
+void MainWindow::onUploadFileRay() {
+    // Get abs path of scene file
+    QString configFilePath = QFileDialog::getOpenFileName(this, tr("Upload File"), QDir::homePath(), tr("Scene Files (*.xml)"));
+    if (configFilePath.isNull()) {
+        std::cout << "Failed to load null scenefile." << std::endl;
+        return;
+    }
+
+    settings.sceneFilePathRay = configFilePath.toStdString();
+
+    std::cout << "Loaded ray tracer scenefile: \"" << configFilePath.toStdString() << "\"." << std::endl;
+
+    // Extracting data pointer from Qt's image API
+    QImage image = QImage(size().width(), size().height(), QImage::Format_RGBX8888);
+    image.fill(Qt::black);
+    RGBA *data = reinterpret_cast<RGBA *>(image.bits());
+
+    RunRayTracer(size().width(), size().height(), configFilePath, data);
+
+    bool success = image.save(":/resources/output.png");
+    if (!success) {
+         std::cerr << "Error: failed to save raytracer output image" << std::endl;
+    }
+    realtime->isRayTraceOutput = true;
+    realtime->SetupRayTracerTexture(image);
+
+//    QByteArray* img = new QByteArray(reinterpret_cast<const char*>(data), 4*size().width()*size().height());
+//    QImage now = QImage((const uchar*)img->data(), size().width(), size().height(), QImage::Format_RGBX8888);
+
+//    auto imageLabel = QLabel(this);
+//    imageLabel.setPixmap(QPixmap::fromImage(now));
+//    setFixedSize(size().width(), size().height());
+//    MainWindow::setCentralWidget(imageLabel);
+    update();
 }
 
 

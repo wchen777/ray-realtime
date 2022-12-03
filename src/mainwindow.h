@@ -29,6 +29,7 @@ private:
     void connectKernelBasedFilterExtra();
 
     void connectUploadFile();
+    void connectUploadFileRay();
     void connectExtraCredit();
 
     Realtime *realtime;
@@ -37,6 +38,7 @@ private:
     QCheckBox *filter3;
     QCheckBox *filter4;
     QPushButton *uploadFile;
+    QPushButton *uploadFileRay;
     QSlider *p1Slider;
     QSlider *p2Slider;
     QSpinBox *p1Box;
@@ -59,6 +61,7 @@ private slots:
     void onKernelBasedFilterExtra();
 
     void onUploadFile();
+     void onUploadFileRay();
     void onValChangeP1(int newValue);
     void onValChangeP2(int newValue);
     void onValChangeNearSlider(int newValue);

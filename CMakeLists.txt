@@ -42,6 +42,17 @@ add_executable(${PROJECT_NAME}
     src/renderer/primitive.cpp
     src/renderer/render.cpp
 
+    src/shader/phong.cpp
+    src/shader/texture.cpp
+    src/shader/shadow.cpp
+    src/raytracer/raytracer.cpp
+    src/raytracer/raytracescene.cpp
+    src/raytracer/raytracescene.cpp
+    src/raytracer/utils.cpp
+    src/raytracer/primitive.cpp
+
+    src/raytracer_driver.h
+
     src/mainwindow.h
     src/realtime.h
     src/settings.h
@@ -60,6 +71,18 @@ add_executable(${PROJECT_NAME}
     src/renderer/debug.h
     src/renderer/primitive.h
     src/filter/filter.h
+
+    src/shader/phong.h
+    src/shader/shadow.h
+    src/shader/texture.h
+    src/utils/rgba.h
+    src/raytracer/raytracer.h
+    src/raytracer/raytracescene.h
+    src/raytracer/raytracescene.h
+    src/raytracer/utils.h
+    src/raytracer/primitive.h
+    src/raytracer/implicit.h
+    src/raytracer/bvh.h
 )
 
 # GLM: this creates its library and allows you to `#include "glm/..."`

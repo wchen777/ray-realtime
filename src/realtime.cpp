@@ -114,7 +114,7 @@ void Realtime::paintGL() {
 //    std::cout << "paintgl top" << std::endl;
     // Students: anything requiring OpenGL calls every frame should be done here
 
-    if (!Realtime::isInitialized) {
+    if (!Realtime::isInitialized && !Realtime::isRayTraceOutput) {
         return;
     }
 
@@ -127,23 +127,28 @@ void Realtime::paintGL() {
 
 //    std::cout << "paint gl loop" << std::endl;
 
-    // set the current draw buffer to be render buffer
-    Realtime::SetRenderFBO();
+    // if we have ran the ray tracer
+    if (!Realtime::isRayTraceOutput) {
+        // otherwise, draw the realtime objects into the render buffer
 
-    // Bind the render shader
-    glUseProgram(Realtime::shaderRender);
+        // set the current draw buffer to be render buffer
+        Realtime::SetRenderFBO();
 
-    // initialize uniforms, not per object
-    Realtime::InitializeCameraUniforms();
-    Realtime::InitializeLightUniforms();
+        // Bind the render shader
+        glUseProgram(Realtime::shaderRender);
 
-    // initilialize uniforms per object, draw object
-    Realtime::DrawBuffers();
+        // initialize uniforms, not per object
+        Realtime::InitializeCameraUniforms();
+        Realtime::InitializeLightUniforms();
 
-    // unbind render shader
-    glUseProgram(0);
+        // initilialize uniforms per object, draw object
+        Realtime::DrawBuffers();
 
-    // draw texture buffer with post-processing effects, set uniforms as necessary
+        // unbind render shader
+        glUseProgram(0);
+    }
+
+    // draw the texture buffer (objects or ray tracer image) with post-processing effects, set uniforms as necessary
     Realtime::DrawTextureFBO();
 
     // Unbind the texture shader
@@ -153,7 +158,7 @@ void Realtime::paintGL() {
 
 void Realtime::resizeGL(int w, int h) {
 
-    std::cout << "resize" << std::endl;
+//    std::cout << "resize" << std::endl;
 
     Realtime::screenHeight = size().height() * m_devicePixelRatio;
     Realtime::screenWidth = size().width() * m_devicePixelRatio;
@@ -191,7 +196,7 @@ void Realtime::resizeGL(int w, int h) {
 
 void Realtime::sceneChanged() {
     // TODOs:
-    std::cout << "scene changed" << std::endl;
+//    std::cout << "scene changed" << std::endl;
 
     // destroy old meshes
     Realtime::DestroyMeshes();

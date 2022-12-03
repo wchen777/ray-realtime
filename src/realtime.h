@@ -65,7 +65,7 @@ public:
     GLuint fbo_renderbuffer;
     GLuint fbo_texturebuffer;
 
-    GLuint m_kitten_texture;
+    GLuint m_ray_texture;
 
     // texture shader stuff
     GLuint fullscreen_vbo;
@@ -80,6 +80,10 @@ public:
     void DestroyFBO();
     void SetRenderFBO();
     void DrawTextureFBO();
+
+    // ray tracer output
+    bool isRayTraceOutput = false; // ensures when ray tracer output is rendered
+    void SetupRayTracerTexture(QImage& texture);
 
 public slots:
     void tick(QTimerEvent* event);                      // Called once per tick of m_timer

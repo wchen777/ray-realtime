@@ -8,7 +8,7 @@ RayTraceScene::RayTraceScene(int width, int height, const RenderData &metaData) 
     globalData(metaData.globalData),
     lights(metaData.lights),
     shapes(metaData.shapes),
-    camera(metaData.cameraData, height, width)
+    camera(metaData.cameraData, height, width, 0.1, 100)
 {
 }
 

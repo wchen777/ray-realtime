@@ -339,9 +339,14 @@ void Realtime::DrawTextureFBO() {
 
     // draw the texture FBO
     glActiveTexture(GL_TEXTURE0); // set active texture to slot 0
+
     // bind active texture
-    glBindTexture(GL_TEXTURE_2D, Realtime::fbo_texturebuffer);
-//    glBindTexture(GL_TEXTURE_2D, m_kitten_texture);
+
+    if (Realtime::isRayTraceOutput) {
+      glBindTexture(GL_TEXTURE_2D, Realtime::m_ray_texture);
+    } else {
+      glBindTexture(GL_TEXTURE_2D, Realtime::fbo_texturebuffer);
+    }
 
 //    std::cout << fbo_texturebuffer << std::endl;
 
@@ -356,6 +361,42 @@ void Realtime::DrawTextureFBO() {
 //    this->doneCurrent();
 }
 
+void Realtime::SetupRayTracerTexture(QImage& texture) {
+
+    // if no ray trace output is specified, return
+    if (!Realtime::isRayTraceOutput) {
+        return;
+    }
+
+//    // Prepare filepath for ray tracer output
+//    QString kitten_filepath = QString(":/resources/output.png");
+
+    // Obtain image from filepath
+    auto m_image = QImage(texture);
+
+    // Format image to fit OpenGL
+    m_image = m_image.convertToFormat(QImage::Format_RGBA8888).mirrored();
+
+    // Generate kitten texture
+    glGenTextures(1, &m_ray_texture);
+
+    // Set the active texture slot to texture slot 0
+    glActiveTexture(GL_TEXTURE0);
+
+    // Bind kitten texture
+    glBindTexture(GL_TEXTURE_2D, m_ray_texture);
+
+    // Load image into kitten texture
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_image.width(), m_image.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, m_image.bits());
+
+    // Set min and mag filters' interpolation mode to linear
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    // Unbind ray tracer output texture
+    glBindTexture(GL_TEXTURE_2D, 0);
+}
+
 
 /*
  * bind and create necessary data for the texture shader
@@ -363,34 +404,6 @@ void Realtime::DrawTextureFBO() {
 void Realtime::SetupTextureShader() {
 
 //    this->makeCurrent();
-
-    // Prepare filepath
-    QString kitten_filepath = QString(":/resources/shaders/kitten.png");
-
-    // Task 1: Obtain image from filepath
-    auto m_image = QImage(kitten_filepath);
-
-    // Task 2: Format image to fit OpenGL
-    m_image = m_image.convertToFormat(QImage::Format_RGBA8888).mirrored();
-
-    // Task 3: Generate kitten texture
-    glGenTextures(1, &m_kitten_texture);
-
-    // Task 9: Set the active texture slot to texture slot 0
-    glActiveTexture(GL_TEXTURE0);
-
-    // Task 4: Bind kitten texture
-    glBindTexture(GL_TEXTURE_2D, m_kitten_texture);
-
-    // Task 5: Load image into kitten texture
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_image.width(), m_image.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, m_image.bits());
-
-    // Task 6: Set min and mag filters' interpolation mode to linear
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    // Task 7: Unbind kitten texture
-    glBindTexture(GL_TEXTURE_2D, 0);
 
     glUseProgram(Realtime::shaderTexture);
     // bind, create 2d sampler, unbind
