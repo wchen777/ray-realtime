@@ -2,6 +2,22 @@
 
 All project handouts can be found [here](https://cs1230.graphics/projects).
 
+
+# Action
+
+## Implementation
+
+To add FBO's I repurposed the Lab 11 code to make and generate FBOs. This can be found in
+
+
+
+## Extra Credit (CS1234)
+
+I didn't time to do too much extra credit as I am starting the final project.
+
+
+# Lights, Camera
+
 ## Implementation
 
 **Note:** I use a fair bit of dynamic memory allocation in this assignment. This is to ensure that I don't unnecessarily copy items from place to place and that ensures that my objects do not go out-of-scope.
@@ -39,6 +55,9 @@ On scene changed, old buffers and meshes are wiped and a new scene is parsed and
 `renderer/primitive.cpp`
 
 I implemented adaptive level of detail based on distance to the camera. For a given primitive, I used the CTM to find the world point center and took the distance from that to the camera. Then, I applied a scale factor that gives a >1 multiple of the tesselation parameters if it is closer than a given distance threshold, and a multiple <1 if it is farther than the threshold. You can toggle this with the extra credit 1 checkbox. See implementation in the given file for more details.
+
+
+### Custom OBJ Mesh loader
 
 `trimeshes/obj_mesh.cpp`
 

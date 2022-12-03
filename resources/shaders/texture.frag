@@ -15,10 +15,13 @@ uniform bool perPixel;
 uniform bool kernelBased;
 uniform bool perPixelExtra;
 uniform bool kernelBasedExtra;
+uniform bool perPixelExtra2;
+uniform bool kernelBasedExtra2;
 
 // filters
 uniform mat3 sharpen;
 uniform mat3 laplacian;
+uniform mat3 gradient_f;
 
 out vec4 fragColor;
 
@@ -41,6 +44,8 @@ void convolve3x3(mat3 kernelFilter) {
     fragColor = finalColor;
 }
 
+
+
 void main()
 {
     fragColor = vec4(0.f);
@@ -56,6 +61,8 @@ void main()
         convolve3x3(sharpen);
     } else if (kernelBasedExtra) {
         convolve3x3(laplacian);
+    } else if (kernelBasedExtra2) {
+        convolve3x3(gradient_f);
     }
 
     if (perPixel) { // PER PIXEL INVERT FILTER
@@ -66,5 +73,8 @@ void main()
         fragColor = vec4(0.56 * fragColor[1], 1.3 * fragColor[2], 0.9 * fragColor[0], 1.f);
     }
 
+    if (perPixelExtra2) {
+        fragColor *= 0.85;
+    }
 
 }

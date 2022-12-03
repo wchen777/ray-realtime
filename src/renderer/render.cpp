@@ -326,11 +326,14 @@ void Realtime::DrawTextureFBO() {
     glUniform1i(glGetUniformLocation(Realtime::shaderTexture, "kernelBased"), Realtime::kernelBasedFilter);
     glUniform1i(glGetUniformLocation(Realtime::shaderTexture, "perPixelExtra"), Realtime::perPixelFilterExtra);
     glUniform1i(glGetUniformLocation(Realtime::shaderTexture, "kernelBasedExtra"), Realtime::kernelBasedFilterExtra);
+    glUniform1i(glGetUniformLocation(Realtime::shaderTexture, "perPixelExtra2"), settings.extraCredit2);
+    glUniform1i(glGetUniformLocation(Realtime::shaderTexture, "kernelBasedExtra2"), settings.extraCredit3);
 
     glUniform1i(glGetUniformLocation(Realtime::shaderTexture, "height"), Realtime::screenHeight);
     glUniform1i(glGetUniformLocation(Realtime::shaderTexture, "width"), Realtime::screenWidth);
     glUniformMatrix3fv(glGetUniformLocation(Realtime::shaderTexture, "sharpen"), 1, GL_FALSE, &SHARPEN_FILTER[0][0]);
     glUniformMatrix3fv(glGetUniformLocation(Realtime::shaderTexture, "laplacian"), 1, GL_FALSE, &LAPLACIAN_FILTER[0][0]);
+    glUniformMatrix3fv(glGetUniformLocation(Realtime::shaderTexture, "gradient_f"), 1, GL_FALSE, &GRADIENT_FILTER[0][0]);
 
     // bind the fullscreen quad
     glBindVertexArray(Realtime::fullscreen_vao);
