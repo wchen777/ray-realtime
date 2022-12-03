@@ -335,20 +335,9 @@ void MainWindow::onUploadFileRay() {
 
     RunRayTracer(size().width(), size().height(), configFilePath, data);
 
-    bool success = image.save(":/resources/output.png");
-    if (!success) {
-         std::cerr << "Error: failed to save raytracer output image" << std::endl;
-    }
     realtime->isRayTraceOutput = true;
     realtime->SetupRayTracerTexture(image);
 
-//    QByteArray* img = new QByteArray(reinterpret_cast<const char*>(data), 4*size().width()*size().height());
-//    QImage now = QImage((const uchar*)img->data(), size().width(), size().height(), QImage::Format_RGBX8888);
-
-//    auto imageLabel = QLabel(this);
-//    imageLabel.setPixmap(QPixmap::fromImage(now));
-//    setFixedSize(size().width(), size().height());
-//    MainWindow::setCentralWidget(imageLabel);
     update();
 }
 
