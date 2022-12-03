@@ -7,14 +7,44 @@ All project handouts can be found [here](https://cs1230.graphics/projects).
 
 ## Implementation
 
-To add FBO's I repurposed the Lab 11 code to make and generate FBOs. This can be found in
+### FBOs
 
+To add FBO's I repurposed the Lab 11 code to make and generate FBOs. This can be found in `renderer/render.cpp`.
+I drew to the renderbuffer initializing, and then drew the renderbuffer with any post-processing effects, just like in the lab.
+I passed in the necessary uniforms for the filtering effects.
+
+### Camera Movement
+
+For translation effects, I accumulated a given direction vector and applied it to the current camera position vector.
+For rotation effects, I used Rodrigues's formula to perform axis angle rotation. I found the theta for this rotation by taking the dragged amount as a proportion of the screen height/width, and then converting to radians.
+
+After any new movement effects were applied, I regenerated the camera matrices.
+
+
+Note: I found the 5 units per second to be a bit too fast for my liking, so I adjusted certain translation directions accordingly to make them feel more smooth and easy to work around.
+
+### Fixes from Lights, Camera
+
+I fixed my resize so that the aspect ratio would be taken account for in the generation matrices and thus resize the screen correctly without warping the scene.
 
 
 ## Extra Credit (CS1234)
 
-I didn't time to do too much extra credit as I am starting the final project.
+I didn't time to do too much extra credit as I had hoped as I am starting the final project.
 
+I implemented two more per-pixel and kernel-based filters:
+
+For per-pixel:
+- Color Swap: change and adjust color channels
+- Darken: reduce intensity by a constant scale factor < 1
+
+For kernel-based:
+- Gradient based on g(0) of the Kirsch edge detection
+- Laplacian
+
+I also integrated by raytracer code so that pressing the button in the top after loading a scene would render it with the raytracer at that camera location.
+
+All extra credit can be toggled in the QWidget.
 
 # Lights, Camera
 
