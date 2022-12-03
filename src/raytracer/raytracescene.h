@@ -38,5 +38,6 @@ public:
     // The getter of the shared pointer to the camera instance of the scene
     const Camera& getCamera() const;
 
-
+    // change the current camera before rendering
+    void setCamera(Camera& camera);
 };

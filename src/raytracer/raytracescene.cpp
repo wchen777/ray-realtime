@@ -35,3 +35,7 @@ const  std::vector<RenderShapeData>& RayTraceScene::getShapes() const {
 const Camera& RayTraceScene::getCamera() const {
     return RayTraceScene::camera;
 }
+
+void RayTraceScene::setCamera(Camera& camera) {
+    RayTraceScene::camera = camera;
+}

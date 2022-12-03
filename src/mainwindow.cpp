@@ -69,8 +69,8 @@ void MainWindow::initialize() {
     uploadFile = new QPushButton();
     uploadFile->setText(QStringLiteral("Upload Scene File"));
 
-    uploadFileRay = new QPushButton();
-    uploadFileRay->setText(QStringLiteral("Upload Scene File (Raytracer)"));
+    ConvertToRay = new QPushButton();
+    ConvertToRay->setText(QStringLiteral("Render with Raytracer"));
 
     // Creates the boxes containing the parameter sliders and number boxes
     QGroupBox *p1Layout = new QGroupBox(); // horizonal slider 1 alignment
@@ -170,7 +170,7 @@ void MainWindow::initialize() {
     ec4->setChecked(false);
 
     vLayout->addWidget(uploadFile);
-    vLayout->addWidget(uploadFileRay);
+    vLayout->addWidget(ConvertToRay);
     vLayout->addWidget(tesselation_label);
     vLayout->addWidget(param1_label);
     vLayout->addWidget(p1Layout);
@@ -215,7 +215,7 @@ void MainWindow::connectUIElements() {
     connectPerPixelFilterExtra();
     connectKernelBasedFilterExtra();
     connectUploadFile();
-    connectUploadFileRay();
+    connectConvertToRay();
     connectParam1();
     connectParam2();
     connectNear();
@@ -243,8 +243,8 @@ void MainWindow::connectUploadFile() {
     connect(uploadFile, &QPushButton::clicked, this, &MainWindow::onUploadFile);
 }
 
-void MainWindow::connectUploadFileRay() {
-    connect(uploadFileRay, &QPushButton::clicked, this, &MainWindow::onUploadFileRay);
+void MainWindow::connectConvertToRay() {
+    connect(ConvertToRay, &QPushButton::clicked, this, &MainWindow::onConvertToRay);
 }
 
 
@@ -316,24 +316,18 @@ void MainWindow::onUploadFile() {
 }
 
 
-void MainWindow::onUploadFileRay() {
-    // Get abs path of scene file
-    QString configFilePath = QFileDialog::getOpenFileName(this, tr("Upload File"), QDir::homePath(), tr("Scene Files (*.xml)"));
-    if (configFilePath.isNull()) {
-        std::cout << "Failed to load null scenefile." << std::endl;
+void MainWindow::onConvertToRay() {
+
+    if (!realtime->isInitialized) {
         return;
     }
-
-    settings.sceneFilePathRay = configFilePath.toStdString();
-
-    std::cout << "Loaded ray tracer scenefile: \"" << configFilePath.toStdString() << "\"." << std::endl;
 
     // Extracting data pointer from Qt's image API
     QImage image = QImage(size().width(), size().height(), QImage::Format_RGBX8888);
     image.fill(Qt::black);
     RGBA *data = reinterpret_cast<RGBA *>(image.bits());
 
-    RunRayTracer(size().width(), size().height(), configFilePath, data);
+    RunRayTracer(size().width(), size().height(), realtime->sceneRenderData, data, *realtime->sceneCamera);
 
     realtime->isRayTraceOutput = true;
     realtime->SetupRayTracerTexture(image);

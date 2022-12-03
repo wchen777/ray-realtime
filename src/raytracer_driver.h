@@ -8,15 +8,7 @@
 #include "utils/sceneparser.h"
 
 
-void RunRayTracer(int width, int height, QString iScenePath, RGBA* data) {
-
-    // create render data
-    RenderData metaData;
-    bool success = SceneParser::parse(iScenePath.toStdString(), metaData);
-
-    if (!success) {
-        return;
-    }
+void RunRayTracer(int width, int height, RenderData& renderData, RGBA* data, Camera& camera) {
 
     // Setting up the raytracer
     RayTracer::Config rtConfig{};
@@ -32,7 +24,10 @@ void RunRayTracer(int width, int height, QString iScenePath, RGBA* data) {
 
     RayTracer raytracer{ rtConfig };
 
-    RayTraceScene rtScene{ width, height, metaData };
+    RayTraceScene rtScene{ width, height, renderData };
+
+    // set the current camera
+    rtScene.setCamera(camera);
 
     raytracer.render(data, rtScene);
 
