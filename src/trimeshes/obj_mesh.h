@@ -3,6 +3,7 @@
 #include <array>
 #include <iostream>
 #include <ostream>
+#include <cstring>
 
 class OBJMesh : public TrimeshData {
 public:
