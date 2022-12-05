@@ -1,11 +1,131 @@
-# Projects 5 & 6: Lights, Camera & Action!
+# Raytracer
 
-All project handouts can be found [here](https://cs1230.graphics/projects).
+## Example Images
+
+![ex1](/ray_output/shadow_test.png)
+
+![ex2](/ray_output/spot_light_1.png)
+
+![ex2](/ray_output/refract_spot.png)
+
+## Implementation and Features
+
+### Setup
+
+I used initializer lists and constructors to setup camera data and other necessary data
+when starting up the ray tracer.
+
+### Implicit Functions
+
+`raytracer/implicit.h`
+
+I used lambdas and composed solver functions and constraint functions in order to create
+a set of functions used for implicit functions. I also did the same thing with normals.
+There is a function for each face of each implicit function as well as for its normal.
+
+### Phong Illumination Model
+
+`shader/phong.h`, `shader/phong.cpp`
+
+I created a function named `Phong()` that handled pixel generation for a single pixel.
+This function utilized a few helper functions to ensure good coding practice.
+
+### Ray Tracing
+
+`raytracer/raytracer.cpp`
+
+The goal is to shoot a ray from the camera through each point on the view plane
+w/ respect to an image coordinate to find where this ray intersects, if any, with
+an object on the scene and then light that point on the image based off the the lights
+in the scene and that intersected object's properties. I followed this idea
+in the `render` function, creating helper functions to handle the shooting of rays,
+multithreading, and other extra credit features.
+
+### Bounding Volume Hierarchy
+
+`raytracer/bvh.h`
+
+I used the bottom-up approach to build a bounding volume hierarchy. I used
+C++'s inheritance and derived class to get this to work. I had an abstract class,
+called `BoundingVolume` that was derived from `BoundingVolumeBox` and `BoundingVolumePrimitive`.
+`BoundingVolumeBox` contained two `BoundingVolume`'s, and `BoundingVolumePrimitive`
+contained just a primitive, with both having their own bounding box.
+More details on the implementation can be found in the `bvh.h` for the thought process
+behind constructing it.
+
+With the BVH, speed-ups are noticeable, but **please note that `recursiveSpheres6` and
+above do not work on my personal computer as it does not have enough memory.**
+
+### Multithreading
+
+I used `std::threads` to split up the image between a few threads to run each part separately.
+More specifically, I split up each image to have a section of rows in the image
+because this is more efficient for cache memory.
+
+### Super-sampling
+
+I followed the given process for super sampling by shooting more than one ray per pixel in the
+view space coordinates. I shot 9 rays per pixel and took the average. However, this
+did not seem to reduce jaggies by that much, if at all?
 
 
-# Action
+### Point Lights and Spot lights
 
-## Implementation
+`shader/phong.h`, `shader/phong.cpp`
+
+Point lights required the use of attenuation as well as the light having a position.
+I utilized the Lab 6 code I wrote for this to find the correct directional vectors for the Phong illumination model.
+
+For spot lights, I utilized the dot product to two vectors to find the angle, which was needed to find the falloff.
+
+### Shadows
+
+`shader/shadow.h`, `shader/shadow.cpp`
+
+When illuminating a scene for a light, shoot a shadow ray to the light. If the ray does not reach the light (the returned t-value is less than that of the light) then we do not count that light.
+For directional lights, the direction to the light is the opposite of the light's direction and for the point and spot lights we have the light's position to calculate.
+
+To avoid self-shadowing, start the position a bit off the intersection point in the light's direction.
+
+
+### Reflection
+
+`raytracer.cpp:reflectionRay()`
+
+Send a reflection ray starting from the intersection point. I make sure that the reflection only happens on reflective objects, and with every reflection, the reflective weight `k_s` is compounded on each successive reflection. When reflecting, I make sure to utilize the previous object's reflective index in calculating the lighting.
+
+
+### Texture Mapping
+
+`raytracer/implicit.h`, `shader/texture.h`, `shader/texture.cpp`
+
+I load in each image as a vector of float triplets representing the texture map. I do this for each unique filename, and create a map of filepath to `TextureMap` struct that contains a unique texture map. If multiple scene objects have the same texture map, I assign it the `TextureMap` pointer. Each `TextureMap` struct is also dynamically allocated in heap memory so that each object can use it freely.
+
+For UV mapping, I implemented a UV mapping function for each surface type with the implicit functions and integrated this into my `PrimitiveSolver`. This way, each object could use its own generic UV mapping function when the primitive is returned.
+
+When deciding a color, the texture map is consulted if the object has one (and if the setting is on) and blends with the diffuse part of the Phong model.
+
+
+### Bilinear interpolation for texture mapping
+
+See `texture.cpp` and `texture.h`, I utilized the bilinear interpolation method learned in Lab 7 to interpolate between neighbors for the texture mapping.
+
+### Refraction
+
+`raytracer/raytracer.cpp:refractionRay()`, `raytracer/utils.cpp`
+
+I utilized Snell's law to calculate the refracted ray direction. I cite a vector arithmetic implementation of this formula and tested it against `glm`'s own refract function.
+
+When refracting, I need to reverse the surface normal on the next recursive iteration if I find that the dot product of the refracted direction and the surface normal is positive. This is because refracting requires that the light hits through an object, which means the surface normal is inverted. I also make sure that if this happens, the next index of transmission is 1, for air, as we are leaving the refracted object.
+Verify that the refraction results match that of the demo.
+
+### Soft Shadows
+
+I have attempted to implement what I believe is the soft shadow with area lights, but I have not been able to see any results. My implementations are in `shadow.h` and `shadow.cpp` and I have created a way to manually test a light.
+
+# Realtime Renderer
+
+## Implementation and Features
 
 ### FBOs
 
@@ -21,16 +141,7 @@ For rotation effects, I used Rodrigues's formula to perform axis angle rotation.
 After any new movement effects were applied, I regenerated the camera matrices.
 
 
-Note: I found the 5 units per second to be a bit too fast for my liking, so I adjusted certain translation directions accordingly to make them feel more smooth and easy to work around.
-
-### Fixes from Lights, Camera
-
-I fixed my resize so that the aspect ratio would be taken account for in the generation matrices and thus resize the screen correctly without warping the scene.
-
-
-## Extra Credit (CS1234)
-
-I didn't time to do too much extra credit as I had hoped as I am starting the final project.
+### Extra filters
 
 I implemented two more per-pixel and kernel-based filters:
 
@@ -46,11 +157,8 @@ I also integrated by raytracer code so that pressing the button in the top after
 
 All extra credit can be toggled in the QWidget.
 
-# Lights, Camera
 
-## Implementation
-
-**Note:** I use a fair bit of dynamic memory allocation in this assignment. This is to ensure that I don't unnecessarily copy items from place to place and that ensures that my objects do not go out-of-scope.
+**Note:** I use a fair bit of dynamic memory allocation. This is to ensure that I don't unnecessarily copy items from place to place and that ensures that my objects do not go out-of-scope.
 
 `trimeshes/`
 I used an object-oriented approach to my trimeshes. I utilized an abstract class called `Trimesh` for a trimesh primitive and then implemented general functions that were known to be shared through all trimeshes, such as building a tile, a updating parameters, getters for types, etc.
@@ -75,10 +183,6 @@ Calls the functions written above in the right places.
 
 For example, `paintGL()` creates buffers on the first initialization, and then sends each uniform to the shader, then draws each object. `initializeGL()` creates the shader.
 On scene changed, old buffers and meshes are wiped and a new scene is parsed and loaded. On parameter updates, necessary buffers are recreated with new parameters.
-
-
-
-## Extra Credit (CS1234)
 
 ### Adaptive Level of Detail
 
