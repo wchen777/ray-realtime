@@ -8,6 +8,10 @@
 
 ![ex2](/ray_output/refract_spot.png)
 
+![ex3](/ray_output/astronaut.png)
+
+![ex4](/ray_output/chess2.png)
+
 ## Implementation and Features
 
 ### Setup
